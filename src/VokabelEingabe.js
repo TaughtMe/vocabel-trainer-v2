@@ -16,24 +16,40 @@ function VokabelEingabe({ onVokabelHinzufuegen }) {
     }
   };
 
-  return (
-    <div>
-      <h2>Neue Vokabel hinzufügen</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Deutsch: 
-            <input type="text" name="deutsch" value={neueVokabel.deutsch} onChange={handleInputChange} autoComplete="off" />
-          </label>
+    return (
+    <div className="card">
+        <h2>Neue Lernkarte erstellen</h2>
+        <form onSubmit={handleSubmit}>
+        <div className="form-grid">
+            <label>
+            Vorderseite (Frage/Begriff)
+            <textarea
+                name="deutsch"
+                value={neueVokabel.deutsch}
+                onChange={handleInputChange}
+                autoComplete="off"
+                placeholder="z.B. What does 'bewältigen' mean?"
+                rows="3"
+            />
+            </label>
+            <label>
+            Rückseite (Antwort/Definition)
+            <textarea
+                name="fremdsprache"
+                value={neueVokabel.fremdsprache}
+                onChange={handleInputChange}
+                autoComplete="off"
+                placeholder="z.B. to cope with, to manage"
+                rows="3"
+            />
+            </label>
         </div>
-        <div>
-          <label>Fremdsprache: 
-            <input type="text" name="fremdsprache" value={neueVokabel.fremdsprache} onChange={handleInputChange} autoComplete="off" />
-          </label>
-        </div>
-        <button type="submit">Hinzufügen</button>
-      </form>
+        <button type="submit" className="button-full-width">
+            Lernkarte hinzufügen
+        </button>
+        </form>
     </div>
-  );
+    );
 }
 
 export default VokabelEingabe;

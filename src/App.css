@@ -1,38 +1,204 @@
+/* App-Container */
 .App {
-  text-align: center;
+  max-width: 800px;
+  margin: 40px auto; /* Mehr Abstand oben/unten */
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Header-Styling (ersetzt den alten .App-header) */
+.App header h1 {
+  font-size: 2.5rem; /* Größere Schrift für den Titel */
+  color: var(--text-color);
+  margin-bottom: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Hauptbereich */
+main {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 2rem; /* Etwas größerer Abstand zwischen den Elementen */
+  margin-top: 2rem;
+}
+
+/* Allgemeines Button-Styling */
+button {
+  background-color: var(--primary-color);
   color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600; /* Etwas fetter */
+  cursor: pointer;
+  border-radius: 8px; /* Abgerundete Ecken wie im Design */
+  transition: background-color 0.2s;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: var(--primary-color-hover);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Spezielles Styling für den Löschen-Button */
+.loesch-button {
+  margin-left: 15px;
+  background-color: #ef4444; /* Ein Rotton, der besser zum Design passt */
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 28px;
+}
+
+.loesch-button:hover {
+  background-color: #dc2626;
+}
+
+/* Formular-Styling */
+form div {
+  margin-bottom: 1rem;
+}
+
+input[type="text"] {
+  padding: 12px;
+  font-size: 1rem;
+  margin-left: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: calc(100% - 150px); /* Bessere Breitenanpassung */
+}
+
+/* NEU: Styling für die Level-Boxen-Ansicht */
+.level-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Erstellt ein 5-spaltiges Gitter */
+  gap: 1rem;
+}
+
+.level-box {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  color: white; /* Standard-Textfarbe für die Boxen */
+}
+
+.level-header {
+  font-weight: 600;
+}
+
+.level-count {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.level-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Hintergrundfarben pro Level zuweisen */
+.level-box.level-1,
+.level-box.level-2 {
+  background-color: var(--level-1-bg);
+  border-color: var(--border-color);
+  color: var(--text-color); /* Dunkler Text für helle Boxen */
+}
+
+.level-box.level-3 {
+  background-color: var(--level-3-bg);
+  border-color: var(--level-3-bg);
+}
+
+.level-box.level-4 {
+  background-color: var(--level-4-bg);
+  border-color: var(--level-4-bg);
+}
+
+.level-box.level-5 {
+  background-color: var(--level-5-bg);
+  border-color: var(--level-5-bg);
+}
+
+/* NEU: Styling für die Karten-Container */
+.card {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Etwas größere Rundung für den Karten-Look */
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  text-align: left; /* Text innerhalb der Karte linksbündig */
+}
+
+/* NEU: Styling für die Vokabel-Abfragekarte */
+.vokabel-karte {
+  min-height: 200px; /* Gibt der Karte eine Mindesthöhe */
+  display: flex;
+  justify-content: center; /* Zentriert den Inhalt horizontal */
+  align-items: center;   /* Zentriert den Inhalt vertikal */
+}
+
+.vokabel-karte .vokabel-anzeige {
+  font-size: 2.5rem; /* Macht das Wort größer */
+  font-weight: 600;
+  margin: 0; /* Entfernt Standard-Abstände vom p-Tag */
+}
+
+/* NEU: Styling für das große Eingabefeld im Lernmodus */
+.lern-input {
+  width: 100%; /* Nimmt die volle verfügbare Breite ein */
+  box-sizing: border-box; /* Stellt sicher, dass Padding und Border in der Breite enthalten sind */
+
+  text-align: center; /* Zentriert den eingegebenen Text */
+  font-size: 1.2rem;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.lern-input:focus {
+  outline: none;
+  border-color: var(--primary-color); /* Hebt das Feld hervor, wenn man hineinklickt */
+}
+
+/* NEU: Styling für die Textareas und den Full-Width-Button */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Zwei gleich breite Spalten */
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: inherit; /* Nutzt die Body-Schriftart */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-top: 0.5rem; /* Abstand zwischen Label und Textarea */
+}
+
+.button-full-width {
+  width: 100%;
+}
+
+/* NEU: Styling für Buttons, die wie Links aussehen sollen */
+.button-link-style {
+  background-color: transparent;
+  color: var(--text-color-light); /* Nutzt unser helleres Grau */
+  font-weight: normal;
+  padding: 10px 0; /* Nur vertikales Padding */
+  text-decoration: underline;
+}
+
+.button-link-style:hover {
+  background-color: transparent;
+  color: var(--text-color); /* Wird beim Hovern dunkler */
 }

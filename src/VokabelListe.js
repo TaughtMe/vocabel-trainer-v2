@@ -1,22 +1,25 @@
 import React from 'react';
 
-function VokabelListe({ vokabeln, loescheVokabel }) {
-  // TEST-AUSGABE HINZUGEFÜGT
-  console.log("VOKABELLISTE KOMPONENTE GERENDERT. DATEN:", vokabeln);
+function VokabelListe({ vokabeln }) {
+  const levels = [1, 2, 3, 4, 5];
+
+  const getVokabelnFuerLevel = (level) => {
+    return vokabeln.filter(v => v.level === level).length;
+  };
 
   return (
-    <div>
-      <h2>Gespeicherte Vokabeln</h2>
-      <ul>
-        {vokabeln.map(v => (
-          <li key={v.id}>
-            {v.deutsch} – {v.fremdsprache} (Level {v.level})
-            <button onClick={() => loescheVokabel(v.id)} className="loesch-button">
-              X
-            </button>
-          </li>
+    <div className="card">
+      <h2>Deine Lernlevel</h2>
+      <div className="level-container">
+        {levels.map(level => (
+          <div key={level} className={`level-box level-${level}`}>
+            <div className="level-header">Level {level}</div>
+            <div className="level-count">{getVokabelnFuerLevel(level)}</div>
+            <div className="level-label">Karten</div>
+            {/* Der "Lernen"-Button kann später hinzugefügt werden */}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
