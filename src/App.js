@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import VokabelListe from './VokabelListe.js';
+import VokabelEingabe from './VokabelEingabe.js'; // FEHLER 1: Dieser Import hat gefehlt.
 
 const APP_STORAGE_KEY = 'vokabeltrainer-vokabeln';
 
@@ -9,7 +11,7 @@ function App() {
     return gespeicherteVokabeln ? JSON.parse(gespeicherteVokabeln) : [];
   });
   
-  const [neueVokabel, setNeueVokabel] = useState({ deutsch: '', fremdsprache: '' });
+  // FEHLER 2: Der State für neueVokabel wurde entfernt, da er jetzt in VokabelEingabe.js lebt.
   const [isLernmodus, setIsLernmodus] = useState(false);
   const [aktuelleVokabel, setAktuelleVokabel] = useState(null);
   const [userAntwort, setUserAntwort] = useState('');
@@ -19,17 +21,10 @@ function App() {
     localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(vokabeln));
   }, [vokabeln]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNeueVokabel({ ...neueVokabel, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (neueVokabel.deutsch && neueVokabel.fremdsprache) {
-      setVokabeln([...vokabeln, { ...neueVokabel, id: Date.now(), level: 1 }]);
-      setNeueVokabel({ deutsch: '', fremdsprache: '' });
-    }
+  // FEHLER 3: handleInputChange und handleSubmit wurden durch diese eine Funktion ersetzt.
+  const addVokabel = (vokabel) => {
+    const vokabelMitLevel = { ...vokabel, id: Date.now(), level: 1 };
+    setVokabeln(alteVokabeln => [...alteVokabeln, vokabelMitLevel]);
   };
 
   const lerneVokabel = () => {
@@ -42,12 +37,12 @@ function App() {
     }
   };
 
-    function loescheVokabel(id) {
+  const loescheVokabel = (id) => {
     const bestaetigt = window.confirm("Möchten Sie diese Vokabel wirklich löschen?");
     if (bestaetigt) {
       setVokabeln(vokabeln.filter(v => v.id !== id));
     }
-  }
+  };
 
   const pruefeAntwort = () => {
     let isCorrect = userAntwort.trim().toLowerCase() === aktuelleVokabel.fremdsprache.trim().toLowerCase();
@@ -68,7 +63,6 @@ function App() {
     setVokabeln(aktualisierteVokabeln);
   };
 
-  // Der restliche Code (return statement) bleibt identisch.
   if (isLernmodus) {
     return (
       <div className="App">
@@ -93,26 +87,13 @@ function App() {
     <div className="App">
       <header className="App-header"><h1>Vokabeltrainer</h1></header>
       <main>
-        <button onClick={lerneVokabel} disabled={vokabeln.length === 0}>Lernen starten</button>
+        <button onClick={lerneVokabel} disabled={vokabeln.length === 0}>
+          Lernen starten
+        </button>
         <hr />
-        <h2>Neue Vokabel hinzufügen</h2>
-        <form onSubmit={handleSubmit}>
-          <div><label>Deutsch: <input type="text" name="deutsch" value={neueVokabel.deutsch} onChange={handleInputChange} autoComplete="off" /></label></div>
-          <div><label>Fremdsprache: <input type="text" name="fremdsprache" value={neueVokabel.fremdsprache} onChange={handleInputChange} autoComplete="off" /></label></div>
-          <button type="submit">Hinzufügen</button>
-        </form>
+        <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
-        <h2>Gespeicherte Vokabeln</h2>
-        <ul>
-          {vokabeln.map(v => (
-            <li key={v.id}>
-              {v.deutsch} – {v.fremdsprache} (Level {v.level})
-              <button onClick={() => loescheVokabel(v.id)} className="loesch-button">
-                X
-              </button>
-            </li>
-          ))}
-        </ul>
+        <VokabelListe vokabeln={vokabeln} loescheVokabel={loescheVokabel} />
       </main>
     </div>
   );
