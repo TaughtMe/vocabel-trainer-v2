@@ -502,3 +502,41 @@ body.dark-mode .level-2 .button-level-lernen {
   color: var(--primary-color);
   flex-shrink: 0; /* Verhindert, dass der Button schrumpft */
 }
+
+/* --- RESPONSIVE DESIGN FÜR KLEINE BILDSCHIRME --- */
+
+/* Diese Regeln gelten nur, wenn der Bildschirm 768px breit oder schmaler ist */
+@media (max-width: 768px) {
+
+  /* Macht den Haupt-Container etwas kompakter */
+  .App {
+    padding: 10px;
+    margin: 20px auto;
+  }
+
+  /* Verkleinert die Haupt-Überschriften */
+  .App header h1,
+  .stapel-header-main-row h1 {
+    font-size: 1.8rem;
+  }
+
+  /* Stapelt die Level-Boxen in 2 Spalten anstatt 5 */
+  .level-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Stapelt die Eingabefelder für neue Karten untereinander */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stapelt die Import/Export Boxen untereinander */
+  .import-export-container {
+    grid-template-columns: 1fr;
+  }
+
+  /* Verkleinert das Padding in den Karten */
+  .card {
+    padding: 1rem;
+  }
+}
