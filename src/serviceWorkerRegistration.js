@@ -56,7 +56,10 @@ function registerValidSW(swUrl, config) {
 
             // Hier senden wir unsere benutzerdefinierte Nachricht an die App.
             const event = new CustomEvent('swUpdate', { detail: registration });
-            window.dispatchEvent(event);
+            // Wir warten eine Sekunde, um sicherzustellen, dass die App bereit ist, das Event zu empfangen.
+              setTimeout(() => {
+                window.dispatchEvent(event);
+              }, 1000);
 
             if (config && config.onUpdate) {
               config.onUpdate(registration);
