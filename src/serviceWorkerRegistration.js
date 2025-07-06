@@ -49,6 +49,11 @@ function registerValidSW(swUrl, config) {
           if (navigator.serviceWorker.controller) {
             // Dies ist der Fall, wenn ein UPDATE verfügbar ist.
             console.log('Ein neues Update für den Service Worker ist verfügbar. Sende Event...');
+
+            // HIER DIE NEUE TEST-ZEILE EINFÜGEN:
+            console.log('EVENT WIRD JETZT GESENDET!', registration);
+
+
             // Hier senden wir unsere benutzerdefinierte Nachricht an die App.
             const event = new CustomEvent('swUpdate', { detail: registration });
             window.dispatchEvent(event);

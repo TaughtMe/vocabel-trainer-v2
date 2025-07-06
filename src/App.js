@@ -48,8 +48,11 @@ function App() {
   // NEU: Dieser useEffect lauscht auf unser benutzerdefiniertes 'swUpdate' Event
   useEffect(() => {
     const handleUpdate = (event) => {
+      // NEUE TEST-AUSGABE
+      console.log('EVENT WURDE IN APP.JS EMPFANGEN!', event);
       setSwRegistration(event.detail);
       setIsUpdateAvailable(true);
+      
     };
     window.addEventListener('swUpdate', handleUpdate);
     return () => window.removeEventListener('swUpdate', handleUpdate);
