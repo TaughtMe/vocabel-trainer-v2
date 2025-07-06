@@ -9,10 +9,10 @@ function Impressum({ onClose }) {
         <p>
           Diese App wird im Rahmen des schulischen Unterrichts verwendet.<br />
           Verantwortlich gemäß § 5 TMG:<br />
-          Max Mustermann<br />
+          Toby  Bryson<br />
           Musterstraße 1<br />
           12345 Musterstadt<br />
-          E-Mail: muster@email.de
+          E-Mail: toby.bryson@schule.bayern.de
         </p>
         <h3>Datenschutzerklärung</h3>
         <p>
@@ -22,12 +22,12 @@ function Impressum({ onClose }) {
         </p>
         <h3>Verwendete Inhalte</h3>
         <p>
-          Icons: moon.svg, sun.svg von [Quelle/Lizenz]<br />
+          Icons: moon.svg, sun.svg von [https://fonts.google.com/icons], Lizenz: Apache License Version 2.0<br />
           Bibliotheken: React, qrcode.react, etc. – jeweils unter Open-Source-Lizenz.
         </p>
         <h3>Copyright</h3>
         <p>
-          © 2025 Max Mustermann. Alle Rechte vorbehalten.
+          © 2025 Toby Bryson. Alle Rechte vorbehalten.
         </p>
       </div>
     </div>
