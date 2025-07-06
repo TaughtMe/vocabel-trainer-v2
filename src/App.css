@@ -69,7 +69,8 @@ input[type="text"] {
   margin-left: 10px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  width: calc(100% - 150px); /* Bessere Breitenanpassung */
+  width: 100%; /* Bessere Breitenanpassung */
+  box-sizing: border-box;
 }
 
 /* NEU: Styling für die Level-Boxen-Ansicht */
@@ -539,4 +540,15 @@ body.dark-mode .level-2 .button-level-lernen {
   .card {
     padding: 1rem;
   }
+}
+
+.neuer-stapel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.neuer-stapel-form input[type="text"],
+.neuer-stapel-form button {
+  width: 100%;
+  box-sizing: border-box;
 }
