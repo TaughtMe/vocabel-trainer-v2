@@ -5,6 +5,9 @@ import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
 import StapelAnsicht from './StapelAnsicht.js';
 import UpdatePrompt from './UpdatePrompt.js';
+// Wichtig: Wir müssen die register-Funktion importieren, um sie aufzurufen
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 
 const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
 const APP_STORAGE_KEY_ALT = 'vokabeltrainer-vokabeln';
@@ -47,14 +50,37 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // Dieser useEffect lauscht auf unser benutzerdefiniertes 'swUpdate' Event
+  // KORRIGIERTER useEffect für die Service Worker Logik
   useEffect(() => {
+    // 1. Wir rufen die register() Funktion auf, um den Service Worker zu aktivieren.
+    // Das ist notwendig, damit die Update-Prüfung überhaupt stattfindet.
+    serviceWorkerRegistration.register();
+
+    // 2. Funktion zur Prüfung, ob ein Worker wartet (für den Refresh-Fall)
+    const checkForWaitingWorker = () => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+          if (registration.waiting) {
+            console.log('Ein wartender Worker wurde beim Seitenstart gefunden.');
+            setSwRegistration(registration);
+            setIsUpdateAvailable(true);
+          }
+        });
+      }
+    };
+    
+    // Wir führen die Prüfung direkt beim Start aus.
+    checkForWaitingWorker();
+
+    // 3. Wir lauschen weiterhin auf das 'swUpdate'-Event für neue Updates.
     const handleUpdate = (event) => {
-      console.log('Update event received in App.js:', event);
+      console.log('Neues Update via "swUpdate"-Event erkannt.');
       setSwRegistration(event.detail);
       setIsUpdateAvailable(true);
     };
     window.addEventListener('swUpdate', handleUpdate);
+
+    // Aufräumfunktion
     return () => window.removeEventListener('swUpdate', handleUpdate);
   }, []);
 
@@ -98,7 +124,6 @@ function App() {
     ));
   };
   
-  // Diese Funktion wird vom Update-Button aufgerufen (STABILE VERSION)
   const handleUpdateAccept = () => {
     setIsUpdateAvailable(false);
     if (swRegistration && swRegistration.waiting) {
