@@ -1,10 +1,10 @@
 {
-  "short_name": "Vokabel-Trainer",
-  "name": "Mein Vokabel-Trainer",
+  "short_name": "LernBox",
+  "name": "LernBoxr",
   "description": "Eine App zum einfachen Lernen von Vokabeln.",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "Logo LernBox.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
