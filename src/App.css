@@ -547,8 +547,11 @@ body.dark-mode .level-2 .button-level-lernen {
   flex-direction: column;
   gap: 16px;
 }
+
 .neuer-stapel-form input[type="text"],
 .neuer-stapel-form button {
   width: 100%;
   box-sizing: border-box;
+  margin: 0;
+  border-radius: 8px;
 }
