@@ -648,4 +648,35 @@ body.dark-mode .level-2 .button-level-lernen {
   border-color: var(--primary-color);
 }
 
-/* --- ENDE des neuen Blocks --- */
+/* -- Korrekturen für Dark Mode & Layout -- */
+
+/* Behebt die Lesbarkeit der Dropdown-Optionen im Dark Mode */
+body.dark-mode .language-selector-wrapper select option {
+  background: #374151; /* Dunkler Hintergrund für die Optionen */
+  color: #d1d5db;     /* Heller Text */
+}
+
+/* Korrigiert den feinen Rahmen bei der Button-Gruppe */
+.button-group-richtung button {
+  /* Wir entfernen den rechten Rand und fügen stattdessen einen linken Rand hinzu */
+  border-right: none;
+  border-left: 1px solid var(--border-color);
+}
+.button-group-richtung button:first-child {
+  /* Der erste Button bekommt keinen linken Rand */
+  border-left: none;
+}
+
+/* Styling für den neuen einzelnen Umschalt-Button */
+.button-toggle {
+  background-color: var(--button-inactive-bg);
+  color: var(--text-color-light);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  width: 100%;
+}
+
+.button-toggle:hover {
+  background-color: var(--card-background-color);
+  border-color: var(--primary-color);
+}

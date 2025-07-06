@@ -11,23 +11,32 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
   const [vokabeln, setVokabeln] = useState(initialerStapel.vokabeln);
   const [quizSession, setQuizSession] = useState(null);
 
+  // ====================================================================================
+  // KORREKTUR 1: Der problematische useEffect-Hook wird hier ersetzt.
+  // Das behebt das Problem, dass die Buttons nicht sofort reagieren.
+  // ====================================================================================
   useEffect(() => {
-    onStapelUpdate({ 
-        ...initialerStapel, 
-        vokabeln: vokabeln,
-    });
-  }, [vokabeln, initialerStapel, onStapelUpdate]);
+    // Dieser Hook sorgt jetzt nur noch dafür, dass Änderungen an der Vokabelliste
+    // (hinzufügen/löschen) im Eltern-Component (App.js) ankommen.
+    onStapelUpdate({ ...initialerStapel, vokabeln: vokabeln });
+  }, [vokabeln, onStapelUpdate]); // WICHTIG: initialerStapel wurde hier entfernt!
 
 
-  const handleRichtungWechseln = (neueRichtung) => {
-    onStapelUpdate({ ...initialerStapel, lernrichtung: neueRichtung });
-  };
   const handleModusWechseln = (neuerModus) => {
     onStapelUpdate({ ...initialerStapel, lernmodus: neuerModus });
   };
   
   const handleSprachAenderung = (key, neueSprache) => {
     onStapelUpdate({ ...initialerStapel, [key]: neueSprache });
+  };
+  
+  // ====================================================================================
+  // KORREKTUR 2: Neue Funktion für den einzelnen Lernrichtung-Button.
+  // Die alte Funktion "handleRichtungWechseln" wird nicht mehr benötigt.
+  // ====================================================================================
+  const toggleLernrichtung = () => {
+    const neueRichtung = initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Rück-Vorder' : 'Vorder-Rück';
+    onStapelUpdate({ ...initialerStapel, lernrichtung: neueRichtung });
   };
 
   const addVokabel = (vokabel) => {
@@ -53,7 +62,7 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
     if (bestaetigt) setVokabeln(importierteVokabeln);
   };
   const handleCsvImport = (neueVokabeln) => {
-    if (!Array.isArray(neueVokabeln) || neueVokabeln.length === 0) { alert("Keine gültigen Vokabeln in der CSV-Datei gefunden."); return; }
+    if (!Array.isArray(neueVokaeln) || neueVokabeln.length === 0) { alert("Keine gültigen Vokabeln in der CSV-Datei gefunden."); return; }
     setVokabeln(alteVokabeln => [...alteVokabeln, ...neueVokabeln]);
     alert(`${neueVokabeln.length} Vokabel(n) erfolgreich importiert!`);
   };
@@ -83,12 +92,15 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         </div>
       </header>
       <main>
-        {/* HIER BEGINNT DER AKTUALISIERTE TEIL */}
+        {/* ==================================================================================== */}
+        {/* KORREKTUR 3: Das JSX für die Einstellungen wird hier komplett ersetzt.             */}
+        {/* ==================================================================================== */}
         <div className="card">
           <h2>Einstellungen</h2>
           <div className="einstellungen-layout-container">
             
             <div className="einstellungen-reihe">
+              {/* Gruppe für Lernmodus */}
               <div className="einstellungs-gruppe">
                 <strong>Lernmodus</strong>
                 <div className="button-group-richtung">
@@ -96,15 +108,17 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
                   <button className={initialerStapel.lernmodus === 'klassisch' ? 'button-active' : ''} onClick={() => handleModusWechseln('klassisch')}>Klassisch</button>
                 </div>
               </div>
+
+              {/* Gruppe für Lernrichtung mit dem neuen Einzel-Button */}
               <div className="einstellungs-gruppe">
                 <strong>Lernrichtung</strong>
-                <div className="button-group-richtung">
-                  <button className={initialerStapel.lernrichtung === 'Vorder-Rück' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Vorder-Rück')}>Vorderseite → Rückseite</button>
-                  <button className={initialerStapel.lernrichtung === 'Rück-Vorder' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Rück-Vorder')}>Rückseite → Vorderseite</button>
-                </div>
+                <button onClick={toggleLernrichtung} className="button-toggle">
+                  {initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Vorderseite → Rückseite' : 'Rückseite → Vorderseite'}
+                </button>
               </div>
             </div>
 
+            {/* Reihe für die Sprachauswahl */}
             <div className="einstellungen-reihe">
               <div className="einstellungs-gruppe vollbreite">
                 <strong>Sprachen für die Sprachausgabe</strong>
@@ -125,7 +139,6 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
 
           </div>
         </div>
-        {/* HIER ENDET DER AKTUALISIERTE TEIL */}
 
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
