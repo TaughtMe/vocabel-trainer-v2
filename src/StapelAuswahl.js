@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import moonIcon from './moon.svg';
+import sunIcon from './sun.svg';
 
 // NEU: Props empfangen
 function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme }) {
