@@ -1,8 +1,10 @@
+// In src/App.js
+
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
 import StapelAnsicht from './StapelAnsicht.js';
-import UpdatePrompt from './UpdatePrompt.js'; // NEU
+import UpdatePrompt from './UpdatePrompt.js';
 
 const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
 const APP_STORAGE_KEY_ALT = 'vokabeltrainer-vokabeln';
@@ -26,7 +28,7 @@ function App() {
     return gespeichertesTheme || 'light';
   });
 
-  // NEU: State für die Update-Benachrichtigung
+  // State für die Update-Benachrichtigung
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
   const [swRegistration, setSwRegistration] = useState(null);
 
@@ -45,14 +47,12 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // NEU: Dieser useEffect lauscht auf unser benutzerdefiniertes 'swUpdate' Event
+  // Dieser useEffect lauscht auf unser benutzerdefiniertes 'swUpdate' Event
   useEffect(() => {
     const handleUpdate = (event) => {
-      // NEUE TEST-AUSGABE
-      console.log('EVENT WURDE IN APP.JS EMPFANGEN!', event);
+      console.log('Update event received in App.js:', event);
       setSwRegistration(event.detail);
       setIsUpdateAvailable(true);
-      
     };
     window.addEventListener('swUpdate', handleUpdate);
     return () => window.removeEventListener('swUpdate', handleUpdate);
@@ -98,17 +98,14 @@ function App() {
     ));
   };
   
-  // NEU: Diese Funktion wird vom Update-Button aufgerufen
+  // Diese Funktion wird vom Update-Button aufgerufen (STABILE VERSION)
   const handleUpdateAccept = () => {
     setIsUpdateAvailable(false);
     if (swRegistration && swRegistration.waiting) {
       swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      // Der Service Worker lädt die Seite nach der Aktivierung neu. 
-      // Ein zusätzlicher Reload sorgt für mehr Stabilität.
-      swRegistration.waiting.addEventListener('statechange', e => {
-        if (e.target.state === 'activated') {
-          window.location.reload();
-        }
+      
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
       });
     }
   };

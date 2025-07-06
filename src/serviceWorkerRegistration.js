@@ -1,3 +1,5 @@
+// In src/serviceWorkerRegistration.js
+
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -45,33 +47,40 @@ function registerValidSW(swUrl, config) {
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        if (installingWorker.state === 'installed') {
-          if (navigator.serviceWorker.controller) {
-            // Dies ist der Fall, wenn ein UPDATE verfügbar ist.
-            console.log('Ein neues Update für den Service Worker ist verfügbar. Sende Event...');
+        if (installingWorker == null) {
+          return;
+        }
+        installingWorker.onstatechange = () => {
+          if (installingWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // At this point, the updated precached content has been fetched,
+              // but the previous service worker will still serve the older
+              // content until all client tabs are closed.
+              console.log(
+                'New content is available and waiting to be installed.'
+              );
 
-            // HIER DIE NEUE TEST-ZEILE EINFÜGEN:
-            console.log('EVENT WIRD JETZT GESENDET!', registration);
+              // Execute the custom event dispatch
+              const event = new CustomEvent('swUpdate', { detail: registration });
+              window.dispatchEvent(event);
 
+              // Execute callback if provided
+              if (config && config.onUpdate) {
+                config.onUpdate(registration);
+              }
+            } else {
+              // At this point, everything has been precached.
+              // It's the perfect time to display a
+              // "Content is cached for offline use." message.
+              console.log('Content is cached for offline use.');
 
-            // Hier senden wir unsere benutzerdefinierte Nachricht an die App.
-            const event = new CustomEvent('swUpdate', { detail: registration });
-            // Wir warten eine Sekunde, um sicherzustellen, dass die App bereit ist, das Event zu empfangen.
-              setTimeout(() => {
-                window.dispatchEvent(event);
-              }, 1000);
-
-            if (config && config.onUpdate) {
-              config.onUpdate(registration);
-            }
-          } else {
-            // Dies ist der Fall bei der allerersten Installation.
-            console.log('Content is cached for offline use.');
-            if (config && config.onSuccess) {
-              config.onSuccess(registration);
+              // Execute callback if provided
+              if (config && config.onSuccess) {
+                config.onSuccess(registration);
+              }
             }
           }
-        }
+        };
       };
     })
     .catch((error) => {
