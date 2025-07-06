@@ -203,45 +203,59 @@ textarea {
   color: var(--text-color); /* Wird beim Hovern dunkler */
 }
 
-/* NEU: Styling für den kleinen "Lernen"-Button in den Level-Boxen */
+/* --- ÜBERARBEITETES STYLING FÜR LERNEN-BUTTONS IN LEVEL-BOXEN --- */
+
+/* Grund-Styling für alle kleinen Lernen-Buttons */
 .button-level-lernen {
-  background-color: rgba(255, 255, 255, 0.2); /* Leicht durchsichtig */
-  color: white;
-  border: 1px solid white;
+  border: 1px solid; /* Der Rand bekommt seine Farbe von der Textfarbe */
   padding: 6px 12px;
   font-size: 0.8rem;
-  font-weight: normal;
+  font-weight: 600; /* Etwas fetter, um ihn hervorzuheben */
   border-radius: 6px;
   margin-top: 1rem;
+  background-color: transparent; /* Transparenter Hintergrund */
+  transition: background-color 0.2s, color 0.2s;
 }
 
+/* Aktiver Button in den dunklen Boxen (Level 3-5) */
+.level-3 .button-level-lernen,
+.level-4 .button-level-lernen,
+.level-5 .button-level-lernen {
+  color: white;
+  border-color: white;
+}
+
+/* Aktiver Button in den hellen Boxen (Level 1-2) */
 .level-1 .button-level-lernen,
 .level-2 .button-level-lernen {
-  background-color: #e5e7eb;
-  color: var(--text-color);
-  border-color: #d1d5db;
+  color: var(--primary-color); /* Lila Text und Rand */
+  border-color: var(--primary-color);
 }
 
-.button-level-lernen:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.4);
+/* NEU: Überschreibt das Aussehen der aktiven Buttons in Level 1 & 2 NUR im Dark Mode */
+body.dark-mode .level-1 .button-level-lernen,
+body.dark-mode .level-2 .button-level-lernen {
+  color: white;
+  border-color: white;
 }
 
+/* Hover-Effekt mit erhöhter Spezifität, gilt für ALLE Level-Buttons */
 .level-1 .button-level-lernen:hover:not(:disabled),
-.level-2 .button-level-lernen:hover:not(:disabled) {
-   background-color: #d1d5db;
+.level-2 .button-level-lernen:hover:not(:disabled),
+.level-3 .button-level-lernen:hover:not(:disabled),
+.level-4 .button-level-lernen:hover:not(:disabled),
+.level-5 .button-level-lernen:hover:not(:disabled) {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
 }
 
+/* Deaktivierter Button (für alle Boxen gleich) */
 .button-level-lernen:disabled {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.level-1 .button-level-lernen:disabled,
-.level-2 .button-level-lernen:disabled {
+  color: var(--text-color-light);
+  border-color: var(--text-color-light);
+  opacity: 0.5; /* Macht ihn noch dezenter */
   background-color: transparent;
-  border-color: #e5e7eb;
-  color: #9ca3af;
 }
 
 /* NEU: Styling für die Datenmanagement-Sektion */
@@ -326,14 +340,23 @@ textarea {
   margin-top: 0;
 }
 
-.stapel-header h1 {
-  margin: 0; /* Entfernt den Standard-Abstand des Titels */
-  flex-grow: 1; /* Erlaubt dem Titel, den verfügbaren Platz zu füllen */
-  text-align: left; /* Zentriert den Text innerhalb des verfügbaren Platzes */
+/* --- FINALE KORREKTUR FÜR ZWEIZEILIGEN HEADER --- */
+.stapel-header .button-link-style {
+  /* Richtet den Zurück-Button links aus und gibt ihm etwas Abstand nach unten */
+  display: block;
+  margin-bottom: 1rem;
+  padding-left: 0; /* Entfernt unnötiges Padding */
 }
 
-.stapel-header button {
-  margin-right: 2rem;
+.stapel-header-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stapel-header-main-row h1 {
+  margin: 0;
+  font-size: 2.5rem;
 }
 
 .header-overview {
@@ -355,8 +378,11 @@ textarea {
 }
 
 .button-group-richtung button {
-  background-color: var(--secondary-button-bg);
-  color: var(--text-color);
+  background-color: var(--button-inactive-bg); /* NEUE VARIABLE HIER */
+  color: var(--text-color-light); /* Hellerer Text für besseren Kontrast */
+  border: none;
+  border-radius: 0;
+  border-right: 1px solid var(--border-color);
   border: none;
   border-radius: 0;
   border-right: 1px solid var(--border-color);
@@ -436,4 +462,43 @@ textarea {
   text-align: center;
   color: var(--text-color-light);
   font-size: 0.9rem;
+}
+
+/* NEU: Styling für den Klassisch-Modus */
+.vokabel-karte.flipped {
+  cursor: default;
+}
+
+.klassisch-antwort {
+  color: var(--primary-color);
+}
+
+.bewertungs-buttons {
+  margin-top: 1rem;
+}
+
+.update-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+.update-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.update-prompt-content p {
+  margin: 0;
+}
+.update-prompt-content button {
+  background-color: white;
+  color: var(--primary-color);
+  flex-shrink: 0; /* Verhindert, dass der Button schrumpft */
 }

@@ -45,26 +45,25 @@ function registerValidSW(swUrl, config) {
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        if (installingWorker == null) {
-          return;
-        }
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              console.log(
-                'New content is available and will be used when all tabs for this page are closed.'
-              );
-              if (config && config.onUpdate) {
-                config.onUpdate(registration);
-              }
-            } else {
-              console.log('Content is cached for offline use.');
-              if (config && config.onSuccess) {
-                config.onSuccess(registration);
-              }
+        if (installingWorker.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            // Dies ist der Fall, wenn ein UPDATE verfügbar ist.
+            console.log('Ein neues Update für den Service Worker ist verfügbar. Sende Event...');
+            // Hier senden wir unsere benutzerdefinierte Nachricht an die App.
+            const event = new CustomEvent('swUpdate', { detail: registration });
+            window.dispatchEvent(event);
+
+            if (config && config.onUpdate) {
+              config.onUpdate(registration);
+            }
+          } else {
+            // Dies ist der Fall bei der allerersten Installation.
+            console.log('Content is cached for offline use.');
+            if (config && config.onSuccess) {
+              config.onSuccess(registration);
             }
           }
-        };
+        }
       };
     })
     .catch((error) => {

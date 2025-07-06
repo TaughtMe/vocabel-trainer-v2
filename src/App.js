@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
-import StapelAnsicht from './StapelAnsicht.js'; // NEU
+import StapelAnsicht from './StapelAnsicht.js';
+import UpdatePrompt from './UpdatePrompt.js'; // NEU
 
 const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
 const APP_STORAGE_KEY_ALT = 'vokabeltrainer-vokabeln';
@@ -25,6 +26,11 @@ function App() {
     return gespeichertesTheme || 'light';
   });
 
+  // NEU: State für die Update-Benachrichtigung
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+  const [swRegistration, setSwRegistration] = useState(null);
+
+
   // --- 2. Alle useEffect-Aufrufe zusammen ---
   useEffect(() => {
     localStorage.setItem(APP_STORAGE_KEY_NEU, JSON.stringify(stapelSammlung));
@@ -38,65 +44,88 @@ function App() {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+  
+  // NEU: Dieser useEffect lauscht auf unser benutzerdefiniertes 'swUpdate' Event
+  useEffect(() => {
+    const handleUpdate = (event) => {
+      setSwRegistration(event.detail);
+      setIsUpdateAvailable(true);
+    };
+    window.addEventListener('swUpdate', handleUpdate);
+    return () => window.removeEventListener('swUpdate', handleUpdate);
+  }, []);
 
+
+  // --- 3. Alle Handler-Funktionen ---
   const handleStapelErstellen = (name) => {
     const neuerStapel = {
       id: Date.now(),
       name: name,
       vokabeln: [],
-      lernrichtung: 'Vorder-Rück' // NEU: Standard-Lernrichtung
+      lernrichtung: 'Vorder-Rück',
+      lernmodus: 'schreiben'
     };
     setStapelSammlung(alteSammlung => [...alteSammlung, neuerStapel]);
   };
 
-  // NEU: Funktion zum Löschen eines Stapels
   const handleStapelLöschen = (id) => {
     const zuLöschenderStapel = stapelSammlung.find(s => s.id === id);
     if (!zuLöschenderStapel) return;
-
-    const bestaetigt = window.confirm(
-      `Möchten Sie den Stapel "${zuLöschenderStapel.name}" wirklich endgültig löschen?`
-    );
+    const bestaetigt = window.confirm(`Möchten Sie den Stapel "${zuLöschenderStapel.name}" wirklich endgültig löschen?`);
     if (bestaetigt) {
       setStapelSammlung(alteSammlung => alteSammlung.filter(s => s.id !== id));
     }
   };
 
   const toggleTheme = () => {
-  setTheme(aktuellesTheme => (aktuellesTheme === 'light' ? 'dark' : 'light'));
+    setTheme(aktuellesTheme => (aktuellesTheme === 'light' ? 'dark' : 'light'));
   };
 
   const handleStapelAuswählen = (id) => {
     setAktiverStapelId(id);
   };
 
-  // NEU: Setzt die ID zurück, um zur Startseite zu gelangen
   const handleZurueckZurUebersicht = () => {
     setAktiverStapelId(null);
   };
 
-  // NEU: Aktualisiert einen Stapel in der Sammlung
   const handleStapelUpdate = (aktualisierterStapel) => {
     setStapelSammlung(alteSammlung => alteSammlung.map(stapel => 
       stapel.id === aktualisierterStapel.id ? aktualisierterStapel : stapel
     ));
   };
+  
+  // NEU: Diese Funktion wird vom Update-Button aufgerufen
+  const handleUpdateAccept = () => {
+    setIsUpdateAvailable(false);
+    if (swRegistration && swRegistration.waiting) {
+      swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      // Der Service Worker lädt die Seite nach der Aktivierung neu. 
+      // Ein zusätzlicher Reload sorgt für mehr Stabilität.
+      swRegistration.waiting.addEventListener('statechange', e => {
+        if (e.target.state === 'activated') {
+          window.location.reload();
+        }
+      });
+    }
+  };
 
-  // Finde den aktuell aktiven Stapel
+  // --- 4. Finale Render-Logik ---
   const aktiverStapel = stapelSammlung.find(s => s.id === aktiverStapelId);
+  let currentPage;
 
   if (aktiverStapel) {
-    // Zeige die Detailansicht für den ausgewählten Stapel
-    return (
+    currentPage = (
       <StapelAnsicht 
         initialerStapel={aktiverStapel}
         onStapelUpdate={handleStapelUpdate}
-        onZurueck={handleZurueckZurUebersicht} 
+        onZurueck={handleZurueckZurUebersicht}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
     );
   } else {
-    // Zeige die Startseite mit der Stapel-Übersicht
-    return (
+    currentPage = (
       <StapelAuswahl
         stapelSammlung={stapelSammlung}
         onStapelAuswählen={handleStapelAuswählen}
@@ -107,6 +136,13 @@ function App() {
       />
     );
   }
+
+  return (
+    <>
+      {isUpdateAvailable && <UpdatePrompt onUpdate={handleUpdateAccept} />}
+      {currentPage}
+    </>
+  );
 }
 
 export default App;

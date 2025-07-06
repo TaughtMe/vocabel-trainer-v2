@@ -8,7 +8,7 @@
   --text-color: #1f2937;         /* Das dunkle Grau für Text */
   --text-color-light: #6b7280;   /* Helleres Grau für Untertitel */
   --border-color: #e5e7eb;       /* Allgemeine Randfarbe */
-  --level-1-bg: #ffffff; /* Level 1 ist weiß */
+  --level-1-bg: #f3f3f3; /* Level 1 ist weiß */
   --level-2-bg: #ffffff; /* Level 2 ist auch weiß */
   --level-3-bg: #ca8a04; /* Gold/Braun */
   --level-4-bg: #6b7280; /* Grau */
@@ -20,6 +20,7 @@
   --warning-color-hover: #d97706;
   --accent-color: #6d28d9; /* Lila */
   --accent-color-hover: #5b21b6;
+  --button-inactive-bg: #e5e7eb;
 }
 
 body.dark-mode {
@@ -29,6 +30,9 @@ body.dark-mode {
   --text-color-light: #9ca3af;        /* Helleres Grau für Untertitel */
   --border-color: #374151;            /* Dunkle Randfarbe */
   --primary-color-hover: #6d28d9;     /* Machen wir den Hover im Darkmode etwas heller */
+  --button-inactive-bg: #374151;
+  --level-1-bg: #374151;
+  --level-2-bg: #374151;
 }
 
 body {

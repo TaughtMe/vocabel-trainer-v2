@@ -90,7 +90,7 @@ function DatenManagement({ vokabeln, onStapelImport, onCsvImport }) {
       <div className="import-export-container">
         <div>
           <h3>Karten aus CSV hinzufügen</h3>
-          <p>Fügt neue Karten aus einer CSV-Datei zu diesem Stapel hinzu.</p>
+          <p> Import Bsp: Haus, house</p>
           <button onClick={handleCsvImportClick} className="button-full-width button-success">CSV Importieren</button>
         </div>
 
