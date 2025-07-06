@@ -1,7 +1,7 @@
 {
   "short_name": "LernBox",
   "name": "LernBoxr",
-  "description": "Eine App zum einfachen Lernen von Vokabeln.",
+  "description": "Eine App zum einfachen Lernen von Karteikarten.",
   "icons": [
     {
       "src": "Logo LernBox.ico",
