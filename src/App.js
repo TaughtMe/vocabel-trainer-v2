@@ -167,6 +167,19 @@ useEffect(() => {
     }
   };
 
+  const handleStapelErstellen = (name, quellSprache, zielSprache) => {
+    const neuerStapel = {
+      id: Date.now(),
+      name: name,
+      vokabeln: [],
+      lernrichtung: 'Vorder-Rück',
+      lernmodus: 'schreiben',
+      quellSprache: quellSprache || 'de-DE', // Fallback, falls nichts übergeben wird
+      zielSprache: zielSprache || 'en-US'   // Fallback
+    };
+    setStapelSammlung(alteSammlung => [...alteSammlung, neuerStapel]);
+  };
+
    const [zeigeImpressum, setZeigeImpressum] = useState(false);
 
   // --- 4. Finale Render-Logik ---
