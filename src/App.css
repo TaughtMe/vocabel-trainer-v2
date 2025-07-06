@@ -202,3 +202,100 @@ textarea {
   background-color: transparent;
   color: var(--text-color); /* Wird beim Hovern dunkler */
 }
+
+/* NEU: Styling für den kleinen "Lernen"-Button in den Level-Boxen */
+.button-level-lernen {
+  background-color: rgba(255, 255, 255, 0.2); /* Leicht durchsichtig */
+  color: white;
+  border: 1px solid white;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: normal;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.level-1 .button-level-lernen,
+.level-2 .button-level-lernen {
+  background-color: #e5e7eb;
+  color: var(--text-color);
+  border-color: #d1d5db;
+}
+
+.button-level-lernen:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.level-1 .button-level-lernen:hover:not(:disabled),
+.level-2 .button-level-lernen:hover:not(:disabled) {
+   background-color: #d1d5db;
+}
+
+.button-level-lernen:disabled {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.level-1 .button-level-lernen:disabled,
+.level-2 .button-level-lernen:disabled {
+  background-color: transparent;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+}
+
+/* NEU: Styling für die Datenmanagement-Sektion */
+.import-export-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.import-export-container h3 {
+  margin-top: 0;
+}
+
+.import-export-container p {
+  color: var(--text-color-light);
+  font-size: 0.9rem;
+  min-height: 50px; /* Sorgt für gleiche Höhe, auch bei wenig Text */
+}
+
+/* NEU: Button-Varianten für Erfolg (Grün) und Warnung (Orange) */
+.button-success {
+  background-color: var(--success-color);
+}
+.button-success:hover {
+  background-color: var(--success-color-hover);
+}
+
+.button-warning {
+  background-color: var(--warning-color);
+}
+.button-warning:hover {
+  background-color: var(--warning-color-hover);
+}
+
+/* ÄNDERUNG: Passen Sie das Grid-Layout an */
+.import-export-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Behält das 2-Spalten-Layout bei */
+  gap: 1.5rem;
+}
+
+/* NEU: Button-Gruppe für Export/Import nebeneinander */
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+}
+.button-group button {
+  width: 100%; /* Lässt beide Buttons die Gruppe füllen */
+}
+
+/* NEU: Button-Variante für Akzent (Lila) */
+.button-accent {
+  background-color: var(--accent-color);
+}
+.button-accent:hover {
+  background-color: var(--accent-color-hover);
+}

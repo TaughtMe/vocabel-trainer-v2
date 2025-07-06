@@ -14,6 +14,12 @@
   --level-4-bg: #6b7280; /* Grau */
   --level-5-bg: #f59e0b; /* Orange/Gold */
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* Schatten für Karten */
+  --success-color: #10b981; /* Grün */
+  --success-color-hover: #059669;
+  --warning-color: #f59e0b; /* Orange/Gold (verwenden wir wieder) */
+  --warning-color-hover: #d97706;
+  --accent-color: #6d28d9; /* Lila */
+  --accent-color-hover: #5b21b6;
 }
 
 body {

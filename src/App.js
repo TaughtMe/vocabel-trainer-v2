@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import VokabelListe from './VokabelListe.js';
-import VokabelEingabe from './VokabelEingabe.js'; // FEHLER 1: Dieser Import hat gefehlt.
+import VokabelEingabe from './VokabelEingabe.js';
 import LernModus from './LernModus.js';
+import DatenManagement from './DatenManagement.js';
 
 const APP_STORAGE_KEY = 'vokabeltrainer-vokabeln';
 
@@ -11,75 +12,74 @@ function App() {
     const gespeicherteVokabeln = localStorage.getItem(APP_STORAGE_KEY);
     return gespeicherteVokabeln ? JSON.parse(gespeicherteVokabeln) : [];
   });
-  
-  // FEHLER 2: Der State für neueVokabel wurde entfernt, da er jetzt in VokabelEingabe.js lebt.
-  const [isLernmodus, setIsLernmodus] = useState(false);
-  const [aktuelleVokabel, setAktuelleVokabel] = useState(null);
-  const [userAntwort, setUserAntwort] = useState('');
-  const [feedback, setFeedback] = useState('');
-  
+
+  // NEU: Hält die Karten für die aktuelle Runde. null = keine Runde aktiv.
+  const [quizSession, setQuizSession] = useState(null);
+
   useEffect(() => {
     localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(vokabeln));
   }, [vokabeln]);
 
-  // FEHLER 3: handleInputChange und handleSubmit wurden durch diese eine Funktion ersetzt.
   const addVokabel = (vokabel) => {
     const vokabelMitLevel = { ...vokabel, id: Date.now(), level: 1 };
     setVokabeln(alteVokabeln => [...alteVokabeln, vokabelMitLevel]);
   };
 
-  const lerneVokabel = () => {
-    if (vokabeln.length > 0) {
-      const sortedVokabeln = [...vokabeln].sort((a, b) => a.level - b.level);
-      setAktuelleVokabel(sortedVokabeln[0]);
-      setIsLernmodus(true);
-      setFeedback('');
-      setUserAntwort('');
-    }
+  // NEU: Überschreibt den aktuellen Stapel mit importierten Vokabeln.
+const handleStapelImport = (importierteVokabeln) => {
+  if (!Array.isArray(importierteVokabeln)) {
+    alert("Fehler: Die Import-Datei hat ein ungültiges Format.");
+    return;
+  }
+  const bestaetigt = window.confirm(
+    "Achtung! Dies ersetzt alle aktuell gespeicherten Vokabeln. Fortfahren?"
+  );
+  if (bestaetigt) {
+    setVokabeln(importierteVokabeln);
+  }
+};
+
+// NEU: Fügt neue Vokabeln aus einem CSV-Import zur bestehenden Liste hinzu.
+const handleCsvImport = (neueVokabeln) => {
+  if (!Array.isArray(neueVokabeln) || neueVokabeln.length === 0) {
+    alert("Keine gültigen Vokabeln in der CSV-Datei gefunden.");
+    return;
+  }
+  // Fügt die neuen Vokabeln zur bestehenden Liste hinzu
+  setVokabeln(alteVokabeln => [...alteVokabeln, ...neueVokabeln]);
+  alert(`${neueVokabeln.length} Vokabel(n) erfolgreich importiert!`);
+};
+
+  // NEU: Startet eine Runde mit den Karten eines bestimmten Levels.
+  const startQuizForLevel = (level) => {
+    const kartenFuerLevel = vokabeln.filter(v => v.level === level);
+    // Mische die Karten für eine zufällige Reihenfolge
+    const gemischteKarten = [...kartenFuerLevel].sort(() => Math.random() - 0.5);
+    setQuizSession(gemischteKarten);
   };
 
-
-  const pruefeAntwort = () => {
-    let isCorrect = userAntwort.trim().toLowerCase() === aktuelleVokabel.fremdsprache.trim().toLowerCase();
-    
-    const aktualisierteVokabeln = vokabeln.map(v => {
-      if (v.id === aktuelleVokabel.id) {
-        if (isCorrect) {
-          setFeedback('Richtig!');
-          return { ...v, level: Math.min(v.level + 1, 5) };
-        } else {
-          setFeedback(`Falsch. Richtig ist: ${aktuelleVokabel.fremdsprache}`);
-          return { ...v, level: 1 };
-        }
-      }
-      return v;
+  // NEU: Beendet eine Runde und aktualisiert die Level der Vokabeln.
+  const handleSessionEnd = (gelernteKarten) => {
+    const neueVokabeln = vokabeln.map(originalVokabel => {
+      const gelernteVersion = gelernteKarten.find(g => g.id === originalVokabel.id);
+      return gelernteVersion || originalVokabel;
     });
-    
-    setVokabeln(aktualisierteVokabeln);
+    setVokabeln(neueVokabeln);
+    setQuizSession(null); // Beendet die Quiz-Runde
   };
 
-return (
-    isLernmodus ? (
-      <LernModus
-        aktuelleVokabel={aktuelleVokabel}
-        userAntwort={userAntwort}
-        feedback={feedback}
-        onAntwortChange={(e) => setUserAntwort(e.target.value)}
-        onPruefen={pruefeAntwort}
-        onWeiter={lerneVokabel}
-        onBeenden={() => setIsLernmodus(false)}
-      />
+  return (
+    quizSession ? (
+      <LernModus session={quizSession} onSessionEnd={handleSessionEnd} />
     ) : (
       <div className="App">
-        <header className="App-header"><h1>Vokabeltrainer</h1></header>
+        <header className="App-header"><h1>Meine Lernstapel</h1></header>
         <main>
-          <button onClick={lerneVokabel} disabled={vokabeln.length === 0}>
-            Lernen starten
-          </button>
-          <hr />
           <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
           <hr />
-          <VokabelListe vokabeln={vokabeln} />
+          <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
+          <hr />
+          <DatenManagement vokabeln={vokabeln} onStapelImport={handleStapelImport} />
         </main>
       </div>
     )
