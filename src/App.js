@@ -13,6 +13,38 @@ const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
 const APP_STORAGE_KEY_ALT = 'vokabeltrainer-vokabeln';
 
 function App() {
+
+useEffect(() => {
+  const registerPeriodicSync = async () => {
+    // Prüfen, ob der Browser die nötigen APIs überhaupt unterstützt
+    if ('serviceWorker' in navigator && 'PeriodicSyncManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        // Erlaubnis für 'periodic-background-sync' anfragen
+        const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+
+        if (status.state === 'granted') {
+          // Erlaubnis ist bereits erteilt
+          // Wir registrieren eine Aufgabe mit einem eindeutigen Namen ('update-check')
+          await registration.periodicSync.register('update-check', {
+            // minInterval in Millisekunden: 24 Stunden
+            // Der Browser entscheidet, wann genau er es ausführt.
+            minInterval: 24 * 60 * 60 * 1000, 
+          });
+          console.log('Periodische Update-Prüfung registriert.');
+        } else {
+          // Erlaubnis wurde noch nicht erteilt oder abgelehnt
+          console.log('Keine Erlaubnis für periodische Hintergrund-Synchronisierung.');
+        }
+      } catch (error) {
+        console.error('Fehler bei der Registrierung der periodischen Synchronisierung:', error);
+      }
+    }
+  };
+
+  registerPeriodicSync();
+  }, []);
+  
   // --- 1. Alle useState-Aufrufe zusammen ---
   const [stapelSammlung, setStapelSammlung] = useState(() => {
     const gespeicherteSammlung = localStorage.getItem(APP_STORAGE_KEY_NEU);

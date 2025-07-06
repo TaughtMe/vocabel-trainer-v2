@@ -58,3 +58,61 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
+// In src/service-worker.js
+
+// Lausche auf das periodicsync-Event
+self.addEventListener('periodicsync', (event) => {
+  // Wir reagieren nur auf das Tag, das wir in der App registriert haben
+  if (event.tag === 'update-check') {
+    console.log('Führe periodische Update-Prüfung aus...');
+    // event.waitUntil() sorgt dafür, dass der Service Worker nicht "einschläft",
+    // bevor unsere asynchrone Aufgabe beendet ist.
+    event.waitUntil(checkForUpdates());
+  }
+});
+
+async function checkForUpdates() {
+  try {
+    // self.registration.update() ist der eingebaute Befehl, um den
+    // Service Worker mit der Version auf dem Server zu vergleichen.
+    // Der Browser führt im Hintergrund einen Byte-Vergleich durch.
+    const registration = await self.registration.update();
+
+    // Wenn ein neuer Worker gefunden wurde, steht er jetzt im 'waiting'-Status
+    if (registration && registration.waiting) {
+      console.log('Neuer Worker gefunden und wartet. Zeige Benachrichtigung an.');
+      // Optional, aber sehr empfohlen: Den Nutzer per Web-Notification informieren.
+      self.registration.showNotification('Update verfügbar!', {
+        body: 'Eine neue Version des Vokabel-Trainers ist bereit zur Installation.',
+        icon: '/logo192.png', // Pfad zu deinem App-Icon
+        tag: 'update-notification', // Verhindert, dass mehrere gleiche Benachrichtigungen erscheinen
+      });
+    } else {
+      console.log('Kein Update gefunden.');
+    }
+  } catch (error) {
+    console.error('Fehler bei der Update-Prüfung:', error);
+  }
+}
+
+// In src/service-worker.js
+
+self.addEventListener('notificationclick', (event) => {
+  // Schließe die Benachrichtigung
+  event.notification.close();
+
+  // Öffne die App oder fokussiere einen bereits offenen Tab
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then((clientList) => {
+      for (const client of clientList) {
+        if ('focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
+    })
+  );
+});
