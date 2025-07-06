@@ -59,7 +59,7 @@ function DatenManagement({ vokabeln, onStapelImport, onCsvImport }) {
         const lines = text.split(/\r?\n/); // Teilt den Text in Zeilen
         const neueVokabeln = lines
           .map((line, index) => {
-            const columns = line.split(',');
+            const columns = line.split(';');
             if (columns.length === 2 && columns[0].trim() !== '' && columns[1].trim() !== '') {
               return {
                 deutsch: columns[0].trim(),

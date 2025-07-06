@@ -22,6 +22,15 @@
   --accent-color-hover: #5b21b6;
 }
 
+body.dark-mode {
+  --background-color: #111827;         /* Sehr dunkles Blau/Grau */
+  --card-background-color: #1f2937;    /* Dunkelgrau für Karten */
+  --text-color: #f9fafb;              /* Fast weiß für Text */
+  --text-color-light: #9ca3af;        /* Helleres Grau für Untertitel */
+  --border-color: #374151;            /* Dunkle Randfarbe */
+  --primary-color-hover: #6d28d9;     /* Machen wir den Hover im Darkmode etwas heller */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

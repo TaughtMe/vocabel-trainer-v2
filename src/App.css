@@ -299,3 +299,141 @@ textarea {
 .button-accent:hover {
   background-color: var(--accent-color-hover);
 }
+
+/* NEU: Styling für die Stapel-Übersicht */
+.subtitle {
+  color: var(--text-color-light);
+  margin-top: 0.25rem; /* Korrigiert den Abstand */
+  margin-bottom: 2rem;
+}
+.stapel-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stapel-karte {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.stapel-karte:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.stapel-karte h3 {
+  margin-top: 0;
+}
+
+.stapel-header h1 {
+  margin: 0; /* Entfernt den Standard-Abstand des Titels */
+  flex-grow: 1; /* Erlaubt dem Titel, den verfügbaren Platz zu füllen */
+  text-align: left; /* Zentriert den Text innerhalb des verfügbaren Platzes */
+}
+
+.stapel-header button {
+  margin-right: 2rem;
+}
+
+.header-overview {
+  text-align: left;
+}
+
+/* NEU: Styling für die Einstellungs-Sektion */
+.einstellungen-container strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color-light);
+}
+
+.button-group-richtung {
+  display: inline-flex;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden; /* Sorgt dafür, dass die Rundung der Buttons innen sichtbar ist */
+}
+
+.button-group-richtung button {
+  background-color: var(--secondary-button-bg);
+  color: var(--text-color);
+  border: none;
+  border-radius: 0;
+  border-right: 1px solid var(--border-color);
+}
+
+.button-group-richtung button:last-child {
+  border-right: none;
+}
+
+.button-group-richtung button.button-active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* NEU: Styling für den Lösch-Button auf der Stapel-Karte */
+
+/* Macht die Karte zum Bezugspunkt für den Button */
+.stapel-karte {
+  position: relative; 
+}
+
+.stapel-karte-loesch-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background-color: transparent;
+  color: var(--text-color-light);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  line-height: 28px;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.stapel-karte-loesch-button:hover {
+  background-color: #fee2e2; /* Leicht roter Hintergrund bei Hover */
+  color: #ef4444; /* Rote Farbe bei Hover */
+}
+
+/* ÄNDERUNG: Header-Layout anpassen */
+.header-overview {
+  text-align: left;
+  display: flex; /* Macht den Header zur Flexbox */
+  justify-content: space-between; /* Drückt Titel und Button auseinander */
+  align-items: center; /* Zentriert beide vertikal */
+}
+
+/* NEU: Styling für den Theme-Umschalt-Button */
+.theme-toggle-button {
+  background-color: transparent;
+  border: 2px solid #4338ca;
+  border-radius: 50%; /* Macht den Button rund */
+  width: 44px;
+  height: 44px;
+  padding: 8px; /* Innenabstand für das Icon */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme-toggle-button:hover {
+  background-color: #4338ca;
+}
+
+.theme-toggle-button img {
+  width: 100%;
+  height: 100%;
+}
+
+/* NEU: Styling für den Kartenzähler im Lernmodus */
+.karten-zaehler {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-color-light);
+  font-size: 0.9rem;
+}

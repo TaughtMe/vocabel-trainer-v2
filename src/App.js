@@ -1,89 +1,112 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import VokabelListe from './VokabelListe.js';
-import VokabelEingabe from './VokabelEingabe.js';
-import LernModus from './LernModus.js';
-import DatenManagement from './DatenManagement.js';
+import StapelAuswahl from './StapelAuswahl.js';
+import StapelAnsicht from './StapelAnsicht.js'; // NEU
 
-const APP_STORAGE_KEY = 'vokabeltrainer-vokabeln';
+const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
+const APP_STORAGE_KEY_ALT = 'vokabeltrainer-vokabeln';
 
 function App() {
-  const [vokabeln, setVokabeln] = useState(() => {
-    const gespeicherteVokabeln = localStorage.getItem(APP_STORAGE_KEY);
-    return gespeicherteVokabeln ? JSON.parse(gespeicherteVokabeln) : [];
+  // --- 1. Alle useState-Aufrufe zusammen ---
+  const [stapelSammlung, setStapelSammlung] = useState(() => {
+    const gespeicherteSammlung = localStorage.getItem(APP_STORAGE_KEY_NEU);
+    if (gespeicherteSammlung) return JSON.parse(gespeicherteSammlung);
+    const alteVokabeln = localStorage.getItem(APP_STORAGE_KEY_ALT);
+    if (alteVokabeln) {
+      return [{ id: Date.now(), name: "Mein erster Stapel", vokabeln: JSON.parse(alteVokabeln) }];
+    }
+    return [];
   });
 
-  // NEU: Hält die Karten für die aktuelle Runde. null = keine Runde aktiv.
-  const [quizSession, setQuizSession] = useState(null);
+  const [aktiverStapelId, setAktiverStapelId] = useState(null);
+
+  const [theme, setTheme] = useState(() => {
+    const gespeichertesTheme = localStorage.getItem('theme');
+    return gespeichertesTheme || 'light';
+  });
+
+  // --- 2. Alle useEffect-Aufrufe zusammen ---
+  useEffect(() => {
+    localStorage.setItem(APP_STORAGE_KEY_NEU, JSON.stringify(stapelSammlung));
+  }, [stapelSammlung]);
 
   useEffect(() => {
-    localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(vokabeln));
-  }, [vokabeln]);
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
-  const addVokabel = (vokabel) => {
-    const vokabelMitLevel = { ...vokabel, id: Date.now(), level: 1 };
-    setVokabeln(alteVokabeln => [...alteVokabeln, vokabelMitLevel]);
+  const handleStapelErstellen = (name) => {
+    const neuerStapel = {
+      id: Date.now(),
+      name: name,
+      vokabeln: [],
+      lernrichtung: 'Vorder-Rück' // NEU: Standard-Lernrichtung
+    };
+    setStapelSammlung(alteSammlung => [...alteSammlung, neuerStapel]);
   };
 
-  // NEU: Überschreibt den aktuellen Stapel mit importierten Vokabeln.
-const handleStapelImport = (importierteVokabeln) => {
-  if (!Array.isArray(importierteVokabeln)) {
-    alert("Fehler: Die Import-Datei hat ein ungültiges Format.");
-    return;
-  }
-  const bestaetigt = window.confirm(
-    "Achtung! Dies ersetzt alle aktuell gespeicherten Vokabeln. Fortfahren?"
-  );
-  if (bestaetigt) {
-    setVokabeln(importierteVokabeln);
-  }
-};
+  // NEU: Funktion zum Löschen eines Stapels
+  const handleStapelLöschen = (id) => {
+    const zuLöschenderStapel = stapelSammlung.find(s => s.id === id);
+    if (!zuLöschenderStapel) return;
 
-// NEU: Fügt neue Vokabeln aus einem CSV-Import zur bestehenden Liste hinzu.
-const handleCsvImport = (neueVokabeln) => {
-  if (!Array.isArray(neueVokabeln) || neueVokabeln.length === 0) {
-    alert("Keine gültigen Vokabeln in der CSV-Datei gefunden.");
-    return;
-  }
-  // Fügt die neuen Vokabeln zur bestehenden Liste hinzu
-  setVokabeln(alteVokabeln => [...alteVokabeln, ...neueVokabeln]);
-  alert(`${neueVokabeln.length} Vokabel(n) erfolgreich importiert!`);
-};
-
-  // NEU: Startet eine Runde mit den Karten eines bestimmten Levels.
-  const startQuizForLevel = (level) => {
-    const kartenFuerLevel = vokabeln.filter(v => v.level === level);
-    // Mische die Karten für eine zufällige Reihenfolge
-    const gemischteKarten = [...kartenFuerLevel].sort(() => Math.random() - 0.5);
-    setQuizSession(gemischteKarten);
+    const bestaetigt = window.confirm(
+      `Möchten Sie den Stapel "${zuLöschenderStapel.name}" wirklich endgültig löschen?`
+    );
+    if (bestaetigt) {
+      setStapelSammlung(alteSammlung => alteSammlung.filter(s => s.id !== id));
+    }
   };
 
-  // NEU: Beendet eine Runde und aktualisiert die Level der Vokabeln.
-  const handleSessionEnd = (gelernteKarten) => {
-    const neueVokabeln = vokabeln.map(originalVokabel => {
-      const gelernteVersion = gelernteKarten.find(g => g.id === originalVokabel.id);
-      return gelernteVersion || originalVokabel;
-    });
-    setVokabeln(neueVokabeln);
-    setQuizSession(null); // Beendet die Quiz-Runde
+  const toggleTheme = () => {
+  setTheme(aktuellesTheme => (aktuellesTheme === 'light' ? 'dark' : 'light'));
   };
 
-  return (
-    quizSession ? (
-      <LernModus session={quizSession} onSessionEnd={handleSessionEnd} />
-    ) : (
-      <div className="App">
-        <header className="App-header"><h1>Meine Lernstapel</h1></header>
-        <main>
-          <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
-          <hr />
-          <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
-          <hr />
-          <DatenManagement vokabeln={vokabeln} onStapelImport={handleStapelImport} />
-        </main>
-      </div>
-    )
-  );
+  const handleStapelAuswählen = (id) => {
+    setAktiverStapelId(id);
+  };
+
+  // NEU: Setzt die ID zurück, um zur Startseite zu gelangen
+  const handleZurueckZurUebersicht = () => {
+    setAktiverStapelId(null);
+  };
+
+  // NEU: Aktualisiert einen Stapel in der Sammlung
+  const handleStapelUpdate = (aktualisierterStapel) => {
+    setStapelSammlung(alteSammlung => alteSammlung.map(stapel => 
+      stapel.id === aktualisierterStapel.id ? aktualisierterStapel : stapel
+    ));
+  };
+
+  // Finde den aktuell aktiven Stapel
+  const aktiverStapel = stapelSammlung.find(s => s.id === aktiverStapelId);
+
+  if (aktiverStapel) {
+    // Zeige die Detailansicht für den ausgewählten Stapel
+    return (
+      <StapelAnsicht 
+        initialerStapel={aktiverStapel}
+        onStapelUpdate={handleStapelUpdate}
+        onZurueck={handleZurueckZurUebersicht} 
+      />
+    );
+  } else {
+    // Zeige die Startseite mit der Stapel-Übersicht
+    return (
+      <StapelAuswahl
+        stapelSammlung={stapelSammlung}
+        onStapelAuswählen={handleStapelAuswählen}
+        onStapelErstellen={handleStapelErstellen}
+        onStapelLöschen={handleStapelLöschen}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 }
 
 export default App;
