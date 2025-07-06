@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
 import StapelAnsicht from './StapelAnsicht.js';
@@ -127,23 +127,23 @@ function App() {
     }
   };
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme(aktuellesTheme => (aktuellesTheme === 'light' ? 'dark' : 'light'));
-  };
+  }, []);
 
   const handleStapelAuswählen = (id) => {
     setAktiverStapelId(id);
   };
 
-  const handleZurueckZurUebersicht = () => {
+  const handleZurueckZurUebersicht = useCallback(() => {
     setAktiverStapelId(null);
-  };
+  }, []);
 
-  const handleStapelUpdate = (aktualisierterStapel) => {
+  const handleStapelUpdate = useCallback((aktualisierterStapel) => {
     setStapelSammlung(alteSammlung => alteSammlung.map(stapel =>
       stapel.id === aktualisierterStapel.id ? aktualisierterStapel : stapel
     ));
-  };
+  }, []); // Das leere Abhängigkeits-Array ist hier korrekt und entscheidend.
   
   const handleUpdateAccept = () => {
     setIsUpdateAvailable(false);
