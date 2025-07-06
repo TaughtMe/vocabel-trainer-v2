@@ -62,7 +62,7 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
     if (bestaetigt) setVokabeln(importierteVokabeln);
   };
   const handleCsvImport = (neueVokabeln) => {
-    if (!Array.isArray(neueVokaeln) || neueVokabeln.length === 0) { alert("Keine gültigen Vokabeln in der CSV-Datei gefunden."); return; }
+    if (!Array.isArray(neueVokabeln) || neueVokabeln.length === 0) { alert("Keine gültigen Vokabeln in der CSV-Datei gefunden."); return; }
     setVokabeln(alteVokabeln => [...alteVokabeln, ...neueVokabeln]);
     alert(`${neueVokabeln.length} Vokabel(n) erfolgreich importiert!`);
   };
