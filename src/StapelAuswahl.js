@@ -55,8 +55,6 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
               ))}
             </div>
 
-            <hr />
-
             <div className="card">
               <form onSubmit={handleSubmit}>
                 <input
