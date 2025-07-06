@@ -555,3 +555,32 @@ body.dark-mode .level-2 .button-level-lernen {
   margin: 0;
   border-radius: 8px;
 }
+
+.app-footer {
+  width: 100%;
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  color: var(--text-color-light);
+  background: none;
+}
+
+/* Modal-Design */
+.impressum-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.impressum-content {
+  background: var(--card-background-color);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 95%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}

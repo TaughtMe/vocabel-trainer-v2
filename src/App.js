@@ -5,7 +5,7 @@ import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
 import StapelAnsicht from './StapelAnsicht.js';
 import UpdatePrompt from './UpdatePrompt.js';
-// Wichtig: Wir müssen die register-Funktion importieren, um sie aufzurufen
+import Impressum from './Impressum';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 
@@ -167,6 +167,8 @@ useEffect(() => {
     }
   };
 
+   const [zeigeImpressum, setZeigeImpressum] = useState(false);
+
   // --- 4. Finale Render-Logik ---
   const aktiverStapel = stapelSammlung.find(s => s.id === aktiverStapelId);
   let currentPage;
@@ -198,6 +200,17 @@ useEffect(() => {
     <>
       {isUpdateAvailable && <UpdatePrompt onUpdate={handleUpdateAccept} />}
       {currentPage}
+
+      <footer className="app-footer">
+        <span 
+          style={{ cursor: "pointer", color: "var(--primary-color)", textDecoration: "underline" }}
+          onClick={() => setZeigeImpressum(true)}
+        >
+          Impressum
+        </span>
+      </footer>
+
+      {zeigeImpressum && <Impressum onClose={() => setZeigeImpressum(false)} />}
     </>
   );
 }
