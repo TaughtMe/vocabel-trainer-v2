@@ -5,26 +5,17 @@ import LernModus from './LernModus.js';
 import DatenManagement from './DatenManagement.js';
 import moonIcon from './moon.svg';
 import sunIcon from './sun.svg';
-import LanguageSelector from './LanguageSelector.js'; // NEU: Import
+import LanguageSelector from './LanguageSelector.js';
 
 function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, toggleTheme }) {
   const [vokabeln, setVokabeln] = useState(initialerStapel.vokabeln);
   const [quizSession, setQuizSession] = useState(null);
 
-  // Der useEffect wurde um onStapelUpdate als Abhängigkeit erweitert, um Zyklen zu vermeiden.
   useEffect(() => {
-    const stapelUpdate = { 
+    onStapelUpdate({ 
         ...initialerStapel, 
-        vokabeln: vokabeln, 
-        lernrichtung: initialerStapel.lernrichtung, 
-        lernmodus: initialerStapel.lernmodus 
-    };
-    // Nur aufrufen, wenn sich wirklich etwas geändert hat (optional, aber gute Praxis)
-    // const originalString = JSON.stringify({ ...initialerStapel, vokabeln });
-    // const newString = JSON.stringify(stapelUpdate);
-    // if(originalString !== newString) {
-       onStapelUpdate(stapelUpdate);
-    // }
+        vokabeln: vokabeln,
+    });
   }, [vokabeln, initialerStapel, onStapelUpdate]);
 
 
@@ -35,7 +26,6 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
     onStapelUpdate({ ...initialerStapel, lernmodus: neuerModus });
   };
   
-  // NEU: Handler-Funktion für die Sprachänderung
   const handleSprachAenderung = (key, neueSprache) => {
     onStapelUpdate({ ...initialerStapel, [key]: neueSprache });
   };
@@ -74,7 +64,7 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
              onSessionEnd={handleSessionEnd} 
              lernrichtung={initialerStapel.lernrichtung} 
              lernmodus={initialerStapel.lernmodus}
-             stapel={initialerStapel} // NEU: Übergabe des ganzen Stapels für die Sprachcodes
+             stapel={initialerStapel}
            />;
   }
 
@@ -93,39 +83,50 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         </div>
       </header>
       <main>
+        {/* HIER BEGINNT DER AKTUALISIERTE TEIL */}
         <div className="card">
           <h2>Einstellungen</h2>
-          <div className="einstellungen-container">
-            <div>
-              <strong>Lernmodus</strong>
-              <div className="button-group-richtung">
-                <button className={initialerStapel.lernmodus === 'schreiben' ? 'button-active' : ''} onClick={() => handleModusWechseln('schreiben')}>Schreiben</button>
-                <button className={initialerStapel.lernmodus === 'klassisch' ? 'button-active' : ''} onClick={() => handleModusWechseln('klassisch')}>Klassisch</button>
+          <div className="einstellungen-layout-container">
+            
+            <div className="einstellungen-reihe">
+              <div className="einstellungs-gruppe">
+                <strong>Lernmodus</strong>
+                <div className="button-group-richtung">
+                  <button className={initialerStapel.lernmodus === 'schreiben' ? 'button-active' : ''} onClick={() => handleModusWechseln('schreiben')}>Schreiben</button>
+                  <button className={initialerStapel.lernmodus === 'klassisch' ? 'button-active' : ''} onClick={() => handleModusWechseln('klassisch')}>Klassisch</button>
+                </div>
+              </div>
+              <div className="einstellungs-gruppe">
+                <strong>Lernrichtung</strong>
+                <div className="button-group-richtung">
+                  <button className={initialerStapel.lernrichtung === 'Vorder-Rück' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Vorder-Rück')}>Vorderseite → Rückseite</button>
+                  <button className={initialerStapel.lernrichtung === 'Rück-Vorder' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Rück-Vorder')}>Rückseite → Vorderseite</button>
+                </div>
               </div>
             </div>
-            <div>
-              <strong>Lernrichtung</strong>
-              <div className="button-group-richtung">
-                <button className={initialerStapel.lernrichtung === 'Vorder-Rück' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Vorder-Rück')}>Vorderseite → Rückseite</button>
-                <button className={initialerStapel.lernrichtung === 'Rück-Vorder' ? 'button-active' : ''} onClick={() => handleRichtungWechseln('Rück-Vorder')}>Rückseite → Vorderseite</button>
-              </div>
-            </div>
-            {/* NEU: Sprachauswahl-Sektion */}
-            <div>
+
+            <div className="einstellungen-reihe">
+              <div className="einstellungs-gruppe vollbreite">
                 <strong>Sprachen für die Sprachausgabe</strong>
-                <LanguageSelector 
+                <div className="sprachen-auswahl-container">
+                  <LanguageSelector
                     label="Vorderseite:"
                     selectedLanguage={initialerStapel.quellSprache || ''}
                     onLanguageChange={(neueSprache) => handleSprachAenderung('quellSprache', neueSprache)}
-                />
-                <LanguageSelector 
+                  />
+                  <LanguageSelector
                     label="Rückseite:"
                     selectedLanguage={initialerStapel.zielSprache || ''}
                     onLanguageChange={(neueSprache) => handleSprachAenderung('zielSprache', neueSprache)}
-                />
+                  />
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
+        {/* HIER ENDET DER AKTUALISIERTE TEIL */}
+
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
         <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />

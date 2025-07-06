@@ -584,3 +584,68 @@ body.dark-mode .level-2 .button-level-lernen {
   width: 95%;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
+
+/* --- START: Layout für die Einstellungs-Sektion --- */
+
+.einstellungen-layout-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Vertikaler Abstand zwischen den Reihen */
+}
+
+.einstellungen-reihe {
+  display: flex;
+  flex-wrap: wrap; /* Erlaubt Umbruch auf sehr kleinen Bildschirmen */
+  gap: 20px; /* Horizontaler Abstand zwischen den Gruppen */
+}
+
+.einstellungs-gruppe {
+  flex: 1; /* Lässt beide Gruppen gleichmäßig wachsen */
+  min-width: 250px; /* Verhindert, dass die Gruppen zu stark gequetscht werden */
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Kleiner Abstand zwischen Label (strong) und den Buttons */
+}
+
+.einstellungs-gruppe.vollbreite {
+  flex-basis: 100%; /* Sorgt dafür, dass die Sprachauswahl die volle Breite einnimmt */
+}
+
+/* --- START: Layout und Design für die Sprachauswahl --- */
+
+.sprachen-auswahl-container {
+  display: flex;
+  gap: 10px; /* Abstand zwischen den beiden Dropdowns */
+}
+
+.language-selector-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-color-secondary);
+}
+
+.language-selector-wrapper select {
+  width: 100%;
+  padding: 12px 10px;
+  background-color: var(--secondary-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Eigener Pfeil, angepasst an Ihr Theme. Die Farbe #888 ist ein neutrales Grau. */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23888%22/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.language-selector-wrapper select:hover {
+  border-color: var(--primary-color);
+}
+
+/* --- ENDE des neuen Blocks --- */
