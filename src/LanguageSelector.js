@@ -3,11 +3,21 @@ import React from 'react';
 // Eine Liste verfügbarer Sprachen für die Sprachausgabe
 const verfügbareSprachen = [
   { code: 'de-DE', name: 'Deutsch' },
-  { code: 'en-US', name: 'Englisch (US)' },
   { code: 'en-GB', name: 'Englisch (UK)' },
   { code: 'es-ES', name: 'Spanisch' },
   { code: 'fr-FR', name: 'Französisch' },
   { code: 'it-IT', name: 'Italienisch' },
+  { code: 'pt-PT', name: 'Portugiesisch (Portugal)' },
+  { code: 'ru-RU', name: 'Russisch' },
+  { code: 'ar-SA', name: 'Arabisch' },
+  { code: 'tr-TR', name: 'Türkisch' },
+  { code: 'pl-PL', name: 'Polnisch' },
+  { code: 'cs-CZ', name: 'Tschechisch' },
+  { code: 'hu-HU', name: 'Ungarisch' },
+  { code: 'ro-RO', name: 'Rumänisch' },
+  { code: 'bg-BG', name: 'Bulgarisch' },
+  { code: 'uk-UA', name: 'Ukrainisch' } 
+
   // Fügen Sie bei Bedarf weitere Sprachen hinzu
 ];
 
