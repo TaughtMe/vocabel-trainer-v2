@@ -68,12 +68,14 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
 
             {/* NEU: Import- und Export-Buttons in einer gemeinsamen Card */}
             <div className="card">
-              <button onClick={onSammlungImportieren} className="button-full-width" style={{marginBottom: '1rem'}}>
-                Alle Stapel importieren (JSON)
-              </button>
-              <button onClick={onGanzesExportieren} className="button-full-width">
-                Alle Stapel exportieren (JSON)
-              </button>
+             <div className="button-container">
+                <button onClick={onGanzesExportieren} className="button-export">
+                  Exportieren
+                </button>
+                <button onClick={onSammlungImportieren} className="button-import">
+                  Importieren
+                </button>
+              </div>
             </div>
             
           </main>
