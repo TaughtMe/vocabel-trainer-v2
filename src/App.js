@@ -40,6 +40,7 @@ function App() {
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
   const [swRegistration, setSwRegistration] = useState(null);
   
+  // KORREKTUR: useState an den Anfang verschoben
   const [zeigeImpressum, setZeigeImpressum] = useState(false);
 
 
@@ -103,6 +104,7 @@ function App() {
 
   // --- 3. Alle Handler-Funktionen ---
 
+  // KORREKTUR: Die alte, doppelte Funktion wurde entfernt. Nur die neue Version bleibt übrig.
   const handleStapelErstellen = (name, quellSprache, zielSprache) => {
     const neuerStapel = {
       id: Date.now(),
@@ -110,8 +112,8 @@ function App() {
       vokabeln: [],
       lernrichtung: 'Vorder-Rück',
       lernmodus: 'schreiben',
-      quellSprache: quellSprache || 'de-DE', 
-      zielSprache: zielSprache || 'en-US'
+      quellSprache: quellSprache || 'de-DE', // Fallback, falls nichts übergeben wird
+      zielSprache: zielSprache || 'en-US'   // Fallback
     };
     setStapelSammlung(alteSammlung => [...alteSammlung, neuerStapel]);
   };
@@ -141,7 +143,9 @@ function App() {
     setStapelSammlung(alteSammlung => alteSammlung.map(stapel =>
       stapel.id === aktualisierterStapel.id ? aktualisierterStapel : stapel
     ));
-  }, []);
+  }, []); // Das leere Abhängigkeits-Array ist hier korrekt und entscheidend.
+
+  // In App.js, bei den anderen Handler-Funktionen:
 
   const handleSammlungErsetzen = (importierteSammlung) => {
     if (!Array.isArray(importierteSammlung)) {
@@ -164,23 +168,6 @@ function App() {
         window.location.reload();
       });
     }
-  };
-
-  const handleGanzesExportieren = () => {
-    if (stapelSammlung.length === 0) {
-      alert("Es gibt keine Stapel zum Exportieren.");
-      return;
-    }
-    const datenStr = JSON.stringify(stapelSammlung, null, 2);
-    const dataBlob = new Blob([datenStr], {type: "application/json"});
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'LernBox_Alle_Stapel.json';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   // --- 4. Finale Render-Logik ---
@@ -207,7 +194,6 @@ function App() {
         onStapelLöschen={handleStapelLöschen}
         theme={theme}
         toggleTheme={toggleTheme}
-        onGanzesExportieren={handleGanzesExportieren}
       />
     );
   }
