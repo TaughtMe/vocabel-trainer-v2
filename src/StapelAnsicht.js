@@ -12,8 +12,8 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
   const [quizSession, setQuizSession] = useState(null);
 
   useEffect(() => {
-    onStapelUpdate({ ...initialerStapel, vokabeln: vokabeln });
-  }, [vokabeln, onStapelUpdate, initialerStapel]);
+  onStapelUpdate({ ...initialerStapel, vokabeln: vokabeln });
+  }, [vokabeln, onStapelUpdate]);
 
   const handleModusWechseln = (neuerModus) => {
     onStapelUpdate({ ...initialerStapel, lernmodus: neuerModus });

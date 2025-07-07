@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './App.css';
 import StapelAuswahl from './StapelAuswahl.js';
 import StapelAnsicht from './StapelAnsicht.js';
 import UpdatePrompt from './UpdatePrompt.js';
 import Impressum from './Impressum';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 
 
 const APP_STORAGE_KEY_NEU = 'vokabeltrainer-stapel-sammlung';
@@ -209,9 +210,10 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-  // --- 4. Finale Render-Logik ---
-  const aktiverStapel = stapelSammlung.find(s => s.id === aktiverStapelId);
-  let currentPage;
+  const aktiverStapel = useMemo(() => 
+    stapelSammlung.find(s => s.id === aktiverStapelId),
+    [stapelSammlung, aktiverStapelId]
+  );
 
   if (aktiverStapel) {
     currentPage = (
