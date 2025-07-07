@@ -1,57 +1,51 @@
-// src/components/LanguageSelection.js
+import React from 'react';
 
-import React, { useState, useEffect } from 'react';
+// Eine Liste verfügbarer Sprachen für die Sprachausgabe
+const verfügbareSprachen = [
+  { code: 'de-DE', name: 'Deutsch' },
+  { code: 'en-US', name: 'Englisch (US)' },
+  { code: 'en-GB', name: 'Englisch (UK)' },
+  { code: 'es-ES', name: 'Spanisch' },
+  { code: 'fr-FR', name: 'Französisch' },
+  { code: 'it-IT', name: 'Italienisch' },
+  // Fügen Sie bei Bedarf weitere Sprachen hinzu
+];
 
-function LanguageSelection({ spracheVorderseite, setSpracheVorderseite, spracheRückseite, setSpracheRückseite }) {
-  const [languages, setLanguages] = useState([]);
-
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-      if (availableVoices.length > 0) {
-        const uniqueLanguages = [...new Set(availableVoices.map(voice => voice.lang.split('-')[0]))].sort();
-        setLanguages(uniqueLanguages);
-      }
-    };
-
-    loadVoices(); // Sofortiger Versuch
-    window.speechSynthesis.addEventListener('voiceschanged', loadVoices); // Warten auf das Event
-    return () => window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
-  }, []); // Nur beim ersten Rendern ausführen
-
-  const renderLanguageOptions = () => {
-    return languages.map(lang => (
-      <option key={lang} value={lang}>
-        {/* Wandelt z.B. "de" in "Deutsch" um */}
-        {new Intl.DisplayNames([lang], { type: 'language' }).of(lang)}
-      </option>
-    ));
-  };
-
+function LanguageSelector({
+  spracheVorderseite,
+  setSpracheVorderseite,
+  spracheRückseite,
+  setSpracheRückseite
+}) {
   return (
-    <div className="language-selection">
-      <div>
-        <label htmlFor="spracheVorderseite">Vorderseite:</label>
+    // Dieses Fragment (<>) ist der Schlüssel zur Lösung.
+    // Es ersetzt das überflüssige <div>, das das Layout zerstört hat.
+    <>
+      <div className="language-selector-wrapper">
+        <label>Vorderseite:</label>
         <select
-          id="spracheVorderseite"
           value={spracheVorderseite}
-          onChange={e => setSpracheVorderseite(e.target.value)}
+          onChange={(e) => setSpracheVorderseite(e.target.value)}
         >
-          {renderLanguageOptions()}
+          {verfügbareSprachen.map(lang => (
+            <option key={lang.code} value={lang.code}>{lang.name}</option>
+          ))}
         </select>
       </div>
-      <div>
-        <label htmlFor="spracheRückseite">Rückseite:</label>
+
+      <div className="language-selector-wrapper">
+        <label>Rückseite:</label>
         <select
-          id="spracheRückseite"
           value={spracheRückseite}
-          onChange={e => setSpracheRückseite(e.target.value)}
+          onChange={(e) => setSpracheRückseite(e.target.value)}
         >
-          {renderLanguageOptions()}
+          {verfügbareSprachen.map(lang => (
+            <option key={lang.code} value={lang.code}>{lang.name}</option>
+          ))}
         </select>
       </div>
-    </div>
+    </>
   );
 }
 
-export default LanguageSelection;
+export default LanguageSelector;
