@@ -615,7 +615,7 @@ body.dark-mode .level-2 .button-level-lernen {
 
 .sprachen-auswahl-container {
   display: flex;
-  flex-direction: column; /* DIESE ZEILE IST NEU */
+  flex-direction: row; /* DIESE ZEILE IST NEU */
   gap: 16px; 
 }
 
