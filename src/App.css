@@ -262,8 +262,8 @@ body.dark-mode .level-2 .button-level-lernen {
 /* NEU: Styling für die Datenmanagement-Sektion */
 .import-export-container {
   display: flex;
-  justify-content: center;
-  text-align: center; 
+  flex-direction: column;
+  align-items: center;
 }
 
 .import-export-container h3 {

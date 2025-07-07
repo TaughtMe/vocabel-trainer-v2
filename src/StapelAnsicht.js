@@ -80,19 +80,56 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         </div>
       </header>
       <main>
-        {/* Einstellungen-Card bleibt unverändert */}
+        {/* Einstellungen-Card */}
         <div className="card">
-         {/* ... Ihr Einstellungs-Code ... */}
+          <h2>Einstellungen</h2>
+          <div className="settings-grid">
+            {/* Lernmodus Auswahl */}
+            <div className="setting-item">
+              <label htmlFor="lernmodus">Lernmodus:</label>
+              <select
+                id="lernmodus"
+                value={initialerStapel.lernmodus}
+                onChange={(e) => handleModusWechseln(e.target.value)}
+              >
+                <option value="Karteikarten">Karteikarten</option>
+                <option value="Multiple-Choice">Multiple-Choice</option>
+              </select>
+            </div>
+
+            {/* Lernrichtung Umschalter */}
+            <div className="setting-item">
+              <label>Lernrichtung:</label>
+              <button onClick={toggleLernrichtung} className="button-link-style">
+                {initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Vorderseite ➞ Rückseite' : 'Rückseite ➞ Vorderseite'}
+              </button>
+            </div>
+
+            {/* Sprachauswahl */}
+            <div className="setting-item">
+              <LanguageSelector
+                label="Sprache Vorderseite"
+                sprache={initialerStapel.quellSprache}
+                onSprachAenderung={(neueSprache) => handleSprachAenderung('quellSprache', neueSprache)}
+              />
+            </div>
+            <div className="setting-item">
+              <LanguageSelector
+                label="Sprache Rückseite"
+                sprache={initialerStapel.zielSprache}
+                onSprachAenderung={(neueSprache) => handleSprachAenderung('zielSprache', neueSprache)}
+              />
+            </div>
+          </div>
         </div>
 
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
         <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
         <hr />
-        {/* NEU: Props werden hier korrekt weitergegeben */}
         <DatenManagement
           vokabeln={vokabeln}
-          onSammlungErsetzen={onSammlungErsetzen} // onStapelImport wurde durch onSammlungErsetzen ersetzt
+          onSammlungErsetzen={onSammlungErsetzen}
           onCsvImport={handleCsvImport}
           ganzeSammlung={ganzeSammlung}
         />

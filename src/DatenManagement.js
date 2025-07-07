@@ -49,11 +49,9 @@ function DatenManagement({ vokabeln, onCsvImport }) {
 
       <h2>Daten & Import/Export</h2>
       <div className="import-export-container">
-        <div>
-          <h3>Karten aus CSV hinzufügen</h3>
-          <p>Fügt Vokabeln zum aktuellen Stapel hinzu. Format: `Wort1,Übersetzung1`</p>
-          <button onClick={handleCsvImportClick} className="button-full-width button-success">CSV Importieren</button>
-        </div>
+        <h3>Karten aus CSV hinzufügen</h3>
+        <p>Fügt Vokabeln zum aktuellen Stapel hinzu. Format: `Wort1,Übersetzung1`</p>
+        <button onClick={handleCsvImportClick} className="button-full-width button-success">CSV Importieren</button>
       </div>
     </div>
   );
