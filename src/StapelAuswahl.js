@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import moonIcon from './moon.svg';
 import sunIcon from './sun.svg';
 
-// KORREKTUR: onGanzesExportieren wird jetzt als Prop empfangen
-function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme, onGanzesExportieren }) {
+// KORREKTUR: onSammlungImportieren wird jetzt als Prop empfangen
+function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme, onGanzesExportieren, onSammlungImportieren }) {
   const [neuerStapelName, setNeuerStapelName] = useState('');
 
   const handleSubmit = (e) => {
@@ -20,7 +20,7 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
         <div className="App">
           <header className="App-header header-overview">
               <div>
-                  <h1>LernBox2.026 beta</h1>
+                  <h1>LernBox2.027 beta</h1>
                   <p className="subtitle">Wähle einen Stapel oder erstelle einen neuen.</p>
               </div>
               <button onClick={toggleTheme} className="theme-toggle-button">
@@ -66,10 +66,13 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
               </form>
             </div>
 
-            {/* NEUER BUTTON FÜR DEN GESAMT-EXPORT */}
+            {/* NEU: Import- und Export-Buttons in einer gemeinsamen Card */}
             <div className="card">
+              <button onClick={onSammlungImportieren} className="button-full-width" style={{marginBottom: '1rem'}}>
+                Alle Stapel importieren (JSON)
+              </button>
               <button onClick={onGanzesExportieren} className="button-full-width">
-                Alle Stapel exportieren
+                Alle Stapel exportieren (JSON)
               </button>
             </div>
             

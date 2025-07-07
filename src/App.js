@@ -42,6 +42,32 @@ function App() {
   
   const [zeigeImpressum, setZeigeImpressum] = useState(false);
 
+  const handleSammlungImportieren = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json,application/json';
+
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importierteSammlung = JSON.parse(event.target.result);
+          // Hier wird die bereits existierende Logik aufgerufen
+          handleSammlungErsetzen(importierteSammlung);
+        } catch (error) {
+          alert('Fehler: Die Datei konnte nicht gelesen werden. Bitte stellen Sie sicher, dass es eine gültige JSON-Datei ist.');
+          console.error("Fehler beim Importieren der Datei:", error);
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    fileInput.click();
+  };
+
 
   // --- 2. Alle useEffect-Aufrufe zusammen ---
   useEffect(() => {
@@ -208,6 +234,7 @@ function App() {
         theme={theme}
         toggleTheme={toggleTheme}
         onGanzesExportieren={handleGanzesExportieren}
+        onSammlungImportieren={handleSammlungImportieren}
       />
     );
   }
