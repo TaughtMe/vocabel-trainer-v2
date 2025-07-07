@@ -215,6 +215,8 @@ function App() {
     [stapelSammlung, aktiverStapelId]
   );
 
+  let currentPage;
+
   if (aktiverStapel) {
     currentPage = (
       <StapelAnsicht
