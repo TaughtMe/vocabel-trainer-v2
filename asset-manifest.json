@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/vocabel-trainer-v2/static/css/main.6e302732.css",
+    "main.css": "/vocabel-trainer-v2/static/css/main.9637b9b6.css",
     "main.js": "/vocabel-trainer-v2/static/js/main.a001ae5e.js",
     "static/js/453.e67c6314.chunk.js": "/vocabel-trainer-v2/static/js/453.e67c6314.chunk.js",
     "service-worker.js": "/vocabel-trainer-v2/service-worker.js",
     "index.html": "/vocabel-trainer-v2/index.html",
     "static/media/sun.svg": "/vocabel-trainer-v2/static/media/sun.1abf4395c5ba39c75d87baad5ba0f979.svg",
     "static/media/moon.svg": "/vocabel-trainer-v2/static/media/moon.8de7e74932577110d867cc58628cf47c.svg",
-    "main.6e302732.css.map": "/vocabel-trainer-v2/static/css/main.6e302732.css.map",
+    "main.9637b9b6.css.map": "/vocabel-trainer-v2/static/css/main.9637b9b6.css.map",
     "main.a001ae5e.js.map": "/vocabel-trainer-v2/static/js/main.a001ae5e.js.map",
     "453.e67c6314.chunk.js.map": "/vocabel-trainer-v2/static/js/453.e67c6314.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6e302732.css",
+    "static/css/main.9637b9b6.css",
     "static/js/main.a001ae5e.js"
   ]
 }
