@@ -10,7 +10,6 @@ import LanguageSelector from './LanguageSelector.js';
 function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, toggleTheme }) {
   const [vokabeln, setVokabeln] = useState(initialerStapel.vokabeln);
   const [quizSession, setQuizSession] = useState(null);
-  // Die lokalen States für die Sprache werden nicht benötigt, da sie aus initialerStapel kommen.
 
   useEffect(() => {
     onStapelUpdate({ ...initialerStapel, vokabeln: vokabeln });
@@ -59,7 +58,6 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
   };
 
   if (quizSession) {
-    // KORREKTUR HIER: Sprachen werden an den LernModus übergeben
     return <LernModus
               session={quizSession}
               onSessionEnd={handleSessionEnd}
@@ -72,20 +70,6 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={onZurueck} className="button-link-style">← Zurück zur Übersicht</button>
-        <div className="stapel-header-main-row">
-          <h1>{initialerStapel.name}</h1>
-          <button onClick={toggleTheme} className="theme-toggle-button">
-            <img
-              src={theme === 'light' ? moonIcon : sunIcon}
-              alt="Theme umschalten"
-            />
-          </button>
-        </div>
-      </header>
-      <main>
     <div className="App">
       <header className="App-header">
         <button onClick={onZurueck} className="button-link-style">← Zurück zur Übersicht</button>
@@ -145,17 +129,6 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
           </div>
         </div>
 
-        <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
-        <hr />
-        <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
-        <hr />
-        <DatenManagement
-          vokabeln={vokabeln}
-          onStapelImport={handleStapelImport}
-          onCsvImport={handleCsvImport}
-        />
-      </main>
-    </div>
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
         <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
