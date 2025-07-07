@@ -3,7 +3,7 @@ import { speak } from './speechService.js';
 
 function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spracheVorderseite, spracheRückseite }) {
   const [aktiverIndex, setAktiverIndex] = useState(0);
-  const [istBeantwortet, setIstBeantwortet] = useState(false); // Statt 'umgedreht'
+  const [istBeantwortet, setIstBeantwortet] = useState(false);
   const [sessionKarten, setSessionKarten] = useState([...session]);
   const [inputValue, setInputValue] = useState('');
   const [feedbackText, setFeedbackText] = useState('');
@@ -11,7 +11,6 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
   const aktuelleKarte = sessionKarten[aktiverIndex];
 
   useEffect(() => {
-    // Reset für jede neue Session
     setAktiverIndex(0);
     setIstBeantwortet(false);
     setInputValue('');
@@ -19,21 +18,17 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
     setSessionKarten([...session]);
   }, [session]);
 
-  // Handler für den "Weiter"-Button
   const handleWeiter = () => {
     if (aktiverIndex < sessionKarten.length - 1) {
       setAktiverIndex(aktiverIndex + 1);
-      // Zustand für die nächste Karte zurücksetzen
       setIstBeantwortet(false);
       setInputValue('');
       setFeedbackText('');
     } else {
-      // Session beenden, wenn alle Karten durch sind
       onSessionEnd(sessionKarten);
     }
   };
 
-  // Wenn es keine Karten mehr gibt, Endbildschirm anzeigen
   if (!aktuelleKarte) {
     return (
       <main className="card" style={{ textAlign: 'center' }}>
@@ -46,33 +41,50 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
     );
   }
 
-  // Definiert Frage, Antwort und die jeweilige Sprache basierend auf der Lernrichtung
   const istVorderseiteZuRückseite = lernrichtung === 'Vorder-Rück';
   const frage = istVorderseiteZuRückseite ? aktuelleKarte.deutsch : aktuelleKarte.fremdsprache;
   const korrekteAntwort = istVorderseiteZuRückseite ? aktuelleKarte.fremdsprache : aktuelleKarte.deutsch;
   const frageSprache = istVorderseiteZuRückseite ? spracheVorderseite : spracheRückseite;
   const antwortSprache = istVorderseiteZuRückseite ? spracheRückseite : spracheVorderseite;
 
-  // Handler für den "Prüfen"-Button
   const handlePruefen = () => {
     const istKorrekt = inputValue.trim().toLowerCase() === korrekteAntwort.trim().toLowerCase();
-    setFeedbackText(istKorrekt ? 'Richtig!' : `Falsch. Richtig ist: ${korrekteAntwort}`);
-    setIstBeantwortet(true); // Zeigt das Feedback und den "Weiter"-Button an
+    
+    // ======================= HIER IST DIE KORREKTUR =======================
+    // Eine Kopie des aktuellen Karten-Arrays erstellen, um den State nicht direkt zu verändern.
+    const kartenKopie = [...sessionKarten];
+    const zuBearbeitendeKarte = { ...kartenKopie[aktiverIndex] };
+
+    if (istKorrekt) {
+      setFeedbackText('Richtig! 🎉');
+      // Level erhöhen, aber maximal bis Level 5
+      zuBearbeitendeKarte.level = Math.min((zuBearbeitendeKarte.level || 0) + 1, 5);
+    } else {
+      setFeedbackText(`Falsch. Richtig ist: ${korrekteAntwort}`);
+      // Bei falscher Antwort wird das Level auf 1 zurückgesetzt
+      zuBearbeitendeKarte.level = 1;
+    }
+
+    // Die bearbeitete Karte in der Kopie an der richtigen Stelle ersetzen
+    kartenKopie[aktiverIndex] = zuBearbeitendeKarte;
+
+    // Den State mit der aktualisierten Kartenliste (inkl. neuem Level) setzen
+    setSessionKarten(kartenKopie);
+    // =====================================================================
+    
+    setIstBeantwortet(true);
   };
 
-  // Handler für die Enter-Taste
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !istBeantwortet) {
       handlePruefen();
     }
   };
 
-  // Wir rendern nur noch den "Schreiben"-Modus basierend auf dem alten Code
   return (
     <main className="card">
       <h2>Übersetze:</h2>
       
-      {/* Die eigentliche Vokabelkarte mit Sprachausgabe-Button */}
       <div className="vokabel-zeile">
         <div className="card vokabel-karte">
           <p className="vokabel-anzeige">{frage}</p>
@@ -80,7 +92,6 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
         <button onClick={() => speak(frage, frageSprache)} className="speak-button">🔊</button>
       </div>
       
-      {/* Eingabefeld */}
       <div>
         <input
           type="text"
@@ -93,14 +104,12 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
         />
       </div>
       
-      {/* Button "Prüfen" oder "Weiter" */}
       {!istBeantwortet ? (
         <button onClick={handlePruefen} className="button-full-width">Prüfen</button>
       ) : (
         <button onClick={handleWeiter} className="button-full-width">Weiter</button>
       )}
       
-      {/* Feedback-Text */}
       {istBeantwortet && (
         <p className="feedback-text">
           {feedbackText}
