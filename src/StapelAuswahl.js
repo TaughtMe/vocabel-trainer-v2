@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import moonIcon from './moon.svg';
 import sunIcon from './sun.svg';
 
-// NEU: Props empfangen
-function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme }) {
+// KORREKTUR: onGanzesExportieren wird jetzt als Prop empfangen
+function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme, onGanzesExportieren }) {
   const [neuerStapelName, setNeuerStapelName] = useState('');
 
   const handleSubmit = (e) => {
-    // ... diese Funktion bleibt unverändert ...
     e.preventDefault();
     if (neuerStapelName.trim() === '') {
       alert("Bitte geben Sie einen Namen für den neuen Stapel ein.");
@@ -20,28 +19,25 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
     return (
         <div className="App">
           <header className="App-header header-overview">
-                <div> {/* Div-Container für linke Seite des Headers */}
-                    <h1>LernBox2.026 beta</h1>
-                    <p className="subtitle">Wähle einen Stapel oder erstelle einen neuen.</p>
-                </div>
-                {/* NEUER THEME-BUTTON */}
-                <button onClick={toggleTheme} className="theme-toggle-button">
-                    <img 
-                    src={theme === 'light' ? moonIcon : sunIcon} 
-                    alt="Theme umschalten" 
-                    />
-                </button>
+              <div>
+                  <h1>LernBox2.026 beta</h1>
+                  <p className="subtitle">Wähle einen Stapel oder erstelle einen neuen.</p>
+              </div>
+              <button onClick={toggleTheme} className="theme-toggle-button">
+                  <img 
+                  src={theme === 'light' ? moonIcon : sunIcon} 
+                  alt="Theme umschalten" 
+                  />
+              </button>
             </header>
           <main>
             <div className="stapel-container">
               {stapelSammlung.map(stapel => (
-                // Wir ändern hier nur den Inhalt der Card
                 <div key={stapel.id} className="card stapel-karte">
-                  {/* NEUER LÖSCH-BUTTON */}
                   <button 
                     className="stapel-karte-loesch-button"
                     onClick={(e) => {
-                      e.stopPropagation(); // Verhindert, dass man zum Stapel navigiert
+                      e.stopPropagation(); 
                       onStapelLöschen(stapel.id);
                     }}
                   >
@@ -69,6 +65,14 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
                 </button>
               </form>
             </div>
+
+            {/* NEUER BUTTON FÜR DEN GESAMT-EXPORT */}
+            <div className="card">
+              <button onClick={onGanzesExportieren} className="button-full-width">
+                Alle Stapel exportieren
+              </button>
+            </div>
+            
           </main>
         </div>
     );
