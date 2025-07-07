@@ -144,6 +144,21 @@ function App() {
       stapel.id === aktualisierterStapel.id ? aktualisierterStapel : stapel
     ));
   }, []); // Das leere Abhängigkeits-Array ist hier korrekt und entscheidend.
+
+  // In App.js, bei den anderen Handler-Funktionen:
+
+  const handleSammlungErsetzen = (importierteSammlung) => {
+    if (!Array.isArray(importierteSammlung)) {
+      alert("Fehler: Die Import-Datei hat ein ungültiges Format.");
+      return;
+    }
+    const bestaetigt = window.confirm(
+      "Achtung! Dies ersetzt ALLE Ihre Stapel und Vokabeln. Dieser Vorgang kann nicht rückgängig gemacht werden. Fortfahren?"
+    );
+    if (bestaetigt) {
+      setStapelSammlung(importierteSammlung);
+    }
+  };
   
   const handleUpdateAccept = () => {
     setIsUpdateAvailable(false);
