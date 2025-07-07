@@ -21,7 +21,7 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
         <div className="App">
           <header className="App-header header-overview">
                 <div> {/* Div-Container für linke Seite des Headers */}
-                    <h1>LernBox2.009 beta</h1>
+                    <h1>LernBox2.010 beta</h1>
                     <p className="subtitle">Wähle einen Stapel oder erstelle einen neuen.</p>
                 </div>
                 {/* NEUER THEME-BUTTON */}

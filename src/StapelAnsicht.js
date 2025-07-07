@@ -10,30 +10,21 @@ import LanguageSelector from './LanguageSelector.js';
 function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, toggleTheme }) {
   const [vokabeln, setVokabeln] = useState(initialerStapel.vokabeln);
   const [quizSession, setQuizSession] = useState(null);
+  // Die lokalen States für die Sprache werden nicht benötigt, da sie aus initialerStapel kommen.
 
-  // ====================================================================================
-  // KORREKTUR 1: Der problematische useEffect-Hook wird hier ersetzt.
-  // Das behebt das Problem, dass die Buttons nicht sofort reagieren.
-  // ====================================================================================
   useEffect(() => {
-    // Dieser Hook sorgt jetzt nur noch dafür, dass Änderungen an der Vokabelliste
-    // (hinzufügen/löschen) im Eltern-Component (App.js) ankommen.
     onStapelUpdate({ ...initialerStapel, vokabeln: vokabeln });
-  }, [vokabeln, onStapelUpdate]); // WICHTIG: initialerStapel wurde hier entfernt!
+  }, [vokabeln, onStapelUpdate]);
 
 
   const handleModusWechseln = (neuerModus) => {
     onStapelUpdate({ ...initialerStapel, lernmodus: neuerModus });
   };
-  
+
   const handleSprachAenderung = (key, neueSprache) => {
     onStapelUpdate({ ...initialerStapel, [key]: neueSprache });
   };
-  
-  // ====================================================================================
-  // KORREKTUR 2: Neue Funktion für den einzelnen Lernrichtung-Button.
-  // Die alte Funktion "handleRichtungWechseln" wird nicht mehr benötigt.
-  // ====================================================================================
+
   const toggleLernrichtung = () => {
     const neueRichtung = initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Rück-Vorder' : 'Vorder-Rück';
     onStapelUpdate({ ...initialerStapel, lernrichtung: neueRichtung });
@@ -68,13 +59,16 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
   };
 
   if (quizSession) {
-    return <LernModus 
-             session={quizSession} 
-             onSessionEnd={handleSessionEnd} 
-             lernrichtung={initialerStapel.lernrichtung} 
-             lernmodus={initialerStapel.lernmodus}
-             stapel={initialerStapel}
-           />;
+    // KORREKTUR HIER: Sprachen werden an den LernModus übergeben
+    return <LernModus
+              session={quizSession}
+              onSessionEnd={handleSessionEnd}
+              lernrichtung={initialerStapel.lernrichtung}
+              lernmodus={initialerStapel.lernmodus}
+              stapel={initialerStapel}
+              spracheVorderseite={initialerStapel.quellSprache}
+              spracheRückseite={initialerStapel.zielSprache}
+            />;
   }
 
   return (
@@ -84,21 +78,18 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         <div className="stapel-header-main-row">
           <h1>{initialerStapel.name}</h1>
           <button onClick={toggleTheme} className="theme-toggle-button">
-            <img 
-              src={theme === 'light' ? moonIcon : sunIcon} 
-              alt="Theme umschalten" 
+            <img
+              src={theme === 'light' ? moonIcon : sunIcon}
+              alt="Theme umschalten"
             />
           </button>
         </div>
       </header>
       <main>
-        {/* ==================================================================================== */}
-        {/* KORREKTUR 3: Das JSX für die Einstellungen wird hier komplett ersetzt.             */}
-        {/* ==================================================================================== */}
         <div className="card">
           <h2>Einstellungen</h2>
           <div className="einstellungen-layout-container">
-            
+
             <div className="einstellungen-reihe">
               {/* Gruppe für Lernmodus */}
               <div className="einstellungs-gruppe">
@@ -144,8 +135,8 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         <hr />
         <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
         <hr />
-        <DatenManagement 
-          vokabeln={vokabeln} 
+        <DatenManagement
+          vokabeln={vokabeln}
           onStapelImport={handleStapelImport}
           onCsvImport={handleCsvImport}
         />

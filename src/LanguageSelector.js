@@ -1,66 +1,57 @@
+// src/components/LanguageSelection.js
+
 import React, { useState, useEffect } from 'react';
 
-// Diese Komponente erhält als Props:
-// - label: Die Beschriftung für das Dropdown (z.B. "Vorderseite")
-// - selectedLanguage: Der aktuell ausgewählte Sprachcode (z.B. 'de-DE')
-// - onLanguageChange: Eine Funktion, die bei einer Änderung aufgerufen wird
-
-function LanguageSelector({ label, selectedLanguage, onLanguageChange }) {
-  const [voices, setVoices] = useState([]);
+function LanguageSelection({ spracheVorderseite, setSpracheVorderseite, spracheRückseite, setSpracheRückseite }) {
+  const [languages, setLanguages] = useState([]);
 
   useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
       if (availableVoices.length > 0) {
-        // Filtern, um jede Sprache nur einmal anzuzeigen
-        const uniqueLanguages = availableVoices.reduce((acc, voice) => {
-          if (!acc[voice.lang]) {
-            // Zeigt Sprache und Namen der ersten gefundenen Stimme an
-            acc[voice.lang] = `${voice.lang} (${voice.name})`;
-          }
-          return acc;
-        }, {});
-        
-        const languageOptions = Object.entries(uniqueLanguages).map(([code, name]) => ({
-          code,
-          name
-        }));
-
-        // Alphabetisch sortieren
-        languageOptions.sort((a, b) => a.name.localeCompare(b.name));
-        
-        setVoices(languageOptions);
+        const uniqueLanguages = [...new Set(availableVoices.map(voice => voice.lang.split('-')[0]))].sort();
+        setLanguages(uniqueLanguages);
       }
     };
 
-    // Wichtig: getVoices() wird oft asynchron geladen.
-    // Wir müssen auf das 'voiceschanged'-Event warten.
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices(); // Einmal direkt beim Start aufrufen
+    loadVoices(); // Sofortiger Versuch
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices); // Warten auf das Event
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+  }, []); // Nur beim ersten Rendern ausführen
 
-    // Aufräumfunktion
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-    };
-  }, []);
+  const renderLanguageOptions = () => {
+    return languages.map(lang => (
+      <option key={lang} value={lang}>
+        {/* Wandelt z.B. "de" in "Deutsch" um */}
+        {new Intl.DisplayNames([lang], { type: 'language' }).of(lang)}
+      </option>
+    ));
+  };
 
   return (
-    <div className="language-selector-wrapper">
-      <label htmlFor={`lang-select-${label}`}>{label}</label>
-      <select 
-        id={`lang-select-${label}`}
-        value={selectedLanguage} 
-        onChange={e => onLanguageChange(e.target.value)}
-      >
-        <option value="">Bitte wählen...</option>
-        {voices.map(({ code, name }) => (
-          <option key={code} value={code}>
-            {name}
-          </option>
-        ))}
-      </select>
+    <div className="language-selection">
+      <div>
+        <label htmlFor="spracheVorderseite">Vorderseite:</label>
+        <select
+          id="spracheVorderseite"
+          value={spracheVorderseite}
+          onChange={e => setSpracheVorderseite(e.target.value)}
+        >
+          {renderLanguageOptions()}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="spracheRückseite">Rückseite:</label>
+        <select
+          id="spracheRückseite"
+          value={spracheRückseite}
+          onChange={e => setSpracheRückseite(e.target.value)}
+        >
+          {renderLanguageOptions()}
+        </select>
+      </div>
     </div>
   );
 }
 
-export default LanguageSelector;
+export default LanguageSelection;
