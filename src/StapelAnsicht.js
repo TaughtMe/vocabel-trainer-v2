@@ -112,7 +112,7 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
               <div className="einstellungs-gruppe vollbreite">
                 <strong>Sprachen für die Sprachausgabe</strong>
                 <div className="sprachen-auswahl-container">
-                  <LanguageSelection
+                  <LanguageSelector
                     spracheVorderseite={initialerStapel.quellSprache || 'de'}
                     setSpracheVorderseite={(neueSprache) => handleSprachAenderung('quellSprache', neueSprache)}
                     spracheRückseite={initialerStapel.zielSprache || 'en'}
