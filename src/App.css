@@ -681,3 +681,37 @@ body.dark-mode .language-selector-wrapper select option {
   background-color: var(--card-background-color);
   border-color: var(--primary-color);
 }
+
+/* Container für die Import/Export-Buttons */
+.button-container {
+  display: flex;
+  justify-content: center; /* Zentriert die Buttons, falls Platz ist */
+  gap: 1rem; /* Abstand zwischen den Buttons */
+}
+
+/* Allgemeiner Stil für beide Buttons im Container */
+.button-container button {
+  flex-grow: 1; /* Lässt beide Buttons gleichmäßig wachsen */
+  border: none;
+  border-radius: 12px; /* Stärker abgerundete Ecken */
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: white;
+  max-width: 200px; /* Maximale Breite pro Button */
+}
+
+.button-container button:hover {
+  transform: scale(1.03); /* Leichter Schwebe-Effekt */
+}
+
+/* Spezifische Farben laut Screenshot */
+.button-export {
+  background-color: #f39c12; /* Orange */
+}
+
+.button-import {
+  background-color: #8e44ad; /* Lila */
+}
