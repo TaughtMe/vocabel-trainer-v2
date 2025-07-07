@@ -47,7 +47,7 @@ function DatenManagement({ vokabeln, onCsvImport }) {
       {/* Das alte json-input wurde entfernt */}
       <input type="file" ref={csvInputRef} style={{ display: 'none' }} accept=".csv, text/csv" onChange={handleCsvFileImport} />
 
-      <h2>Daten & Import/Export</h2>
+      
       <div className="import-export-container">
         <h3>Karten aus CSV hinzufügen</h3>
         <p>Fügt Vokabeln zum aktuellen Stapel hinzu. Format: `Wort1,Übersetzung1`</p>
