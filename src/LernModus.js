@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { speak } from '../speech/speechService'; // Der Speech-Service wird importiert
+import { speak } from './speechService.js'; // RICHTIG
 
 // Die neuen Props spracheVorderseite und spracheRückseite werden hier empfangen
 function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spracheVorderseite, spracheRückseite }) {
