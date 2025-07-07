@@ -291,13 +291,6 @@ body.dark-mode .level-2 .button-level-lernen {
   background-color: var(--warning-color-hover);
 }
 
-/* ÄNDERUNG: Passen Sie das Grid-Layout an */
-.import-export-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Behält das 2-Spalten-Layout bei */
-  gap: 1.5rem;
-}
-
 /* NEU: Button-Gruppe für Export/Import nebeneinander */
 .button-group {
   display: flex;
