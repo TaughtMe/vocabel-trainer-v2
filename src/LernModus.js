@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { speak } from './speechService.js'; // RICHTIG
+import { speak } from './speechService.js';
 
 // Die neuen Props spracheVorderseite und spracheRückseite werden hier empfangen
 function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spracheVorderseite, spracheRückseite }) {
@@ -36,9 +36,9 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
   const handleAufdecken = () => {
     setUmgedreht(true);
     if (lernmodus === 'schreiben') {
-        const vorderseite = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.vorderseite : aktuelleKarte.rueckseite;
-        const rueckseite = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.rueckseite : aktuelleKarte.vorderseite;
-        const istKorrekt = inputValue.trim().toLowerCase() === rueckseite.trim().toLowerCase();
+        // KORREKTUR: 'rueckseite' wird hier als die Antwortseite der Karte definiert
+        const antwortSeite = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.fremdsprache : aktuelleKarte.deutsch;
+        const istKorrekt = inputValue.trim().toLowerCase() === antwortSeite.trim().toLowerCase();
         setFeedback(istKorrekt ? 'richtig' : 'falsch');
     }
   };
@@ -47,10 +47,11 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
   const handleSpeak = () => {
     const vorderseiteZeigt = (lernrichtung === 'Vorder-Rück' && !umgedreht) || (lernrichtung === 'Rück-Vorder' && umgedreht);
     
+    // KORREKTUR: Logik war korrekt, aber falsche Prop-Namen wurden verwendet
     if (vorderseiteZeigt) {
-      speak(aktuelleKarte.vorderseite, spracheVorderseite);
+      speak(aktuelleKarte.deutsch, spracheVorderseite);
     } else {
-      speak(aktuelleKarte.rueckseite, spracheRückseite);
+      speak(aktuelleKarte.fremdsprache, spracheRückseite);
     }
   };
 
@@ -58,9 +59,9 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
     return <div>Lade Lernmodus...</div>;
   }
 
-  // Definiert, welche Seite der Karte die Frage und welche die Antwort ist
-  const frage = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.vorderseite : aktuelleKarte.rueckseite;
-  const antwort = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.rueckseite : aktuelleKarte.vorderseite;
+  // KORREKTUR: Hier wurden 'vorderseite'/'rueckseite' durch 'deutsch'/'fremdsprache' ersetzt
+  const frage = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.deutsch : aktuelleKarte.fremdsprache;
+  const antwort = lernrichtung === 'Vorder-Rück' ? aktuelleKarte.fremdsprache : aktuelleKarte.deutsch;
 
   return (
     <div className="lern-modus">
@@ -81,24 +82,24 @@ function LernModus({ session, onSessionEnd, lernrichtung, lernmodus, stapel, spr
       </div>
 
       <div className="lern-controls">
-         {/* Sprachausgabe-Button */}
-         <button onClick={handleSpeak} className="speak-button">🔊 Vorlesen</button>
+          {/* Sprachausgabe-Button */}
+          <button onClick={handleSpeak} className="speak-button">🔊 Vorlesen</button>
         
-        {lernmodus === 'schreiben' && !umgedreht && (
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Antwort eingeben"
-            className="antwort-input"
-          />
-        )}
+          {lernmodus === 'schreiben' && !umgedreht && (
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Antwort eingeben"
+              className="antwort-input"
+            />
+          )}
         
-        {umgedreht ? (
-          <button onClick={handleWeiter}>Weiter</button>
-        ) : (
-          <button onClick={handleAufdecken}>Aufdecken</button>
-        )}
+          {umgedreht ? (
+            <button onClick={handleWeiter}>Weiter</button>
+          ) : (
+            <button onClick={handleAufdecken}>Aufdecken</button>
+          )}
       </div>
 
       <div className="session-fortschritt">
