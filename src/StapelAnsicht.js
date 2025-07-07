@@ -82,45 +82,58 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
       <main>
         {/* Einstellungen-Card */}
         <div className="card">
-          <h2>Einstellungen</h2>
-          <div className="settings-grid">
-            {/* Lernmodus Auswahl */}
-            <div className="setting-item">
-              <label htmlFor="lernmodus">Lernmodus:</label>
-              <select
-                id="lernmodus"
-                value={initialerStapel.lernmodus}
-                onChange={(e) => handleModusWechseln(e.target.value)}
-              >
-                <option value="Karteikarten">Karteikarten</option>
-                <option value="Multiple-Choice">Multiple-Choice</option>
-              </select>
+            <h2>Einstellungen</h2>
+            <div className="settings-row">
+              {/* Lernmodus */}
+              <div className="settings-group">
+                <label>Lernmodus</label>
+                <div className="segmented-control">
+                  <button
+                    onClick={() => handleModusWechseln('Schreiben')}
+                    className={initialerStapel.lernmodus === 'Schreiben' ? 'active' : ''}
+                  >
+                    Schreiben
+                  </button>
+                  <button
+                    onClick={() => handleModusWechseln('Klassisch')}
+                    className={initialerStapel.lernmodus === 'Klassisch' ? 'active' : ''}
+                  >
+                    Klassisch
+                  </button>
+                </div>
+              </div>
+
+              {/* Lernrichtung */}
+              <div className="settings-group">
+                <label>Lernrichtung</label>
+                <button onClick={toggleLernrichtung} className="direction-button">
+                  {initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Vorderseite → Rückseite' : 'Rückseite → Vorderseite'}
+                </button>
+              </div>
             </div>
 
-            {/* Lernrichtung Umschalter */}
-            <div className="setting-item">
-              <label>Lernrichtung:</label>
-              <button onClick={toggleLernrichtung} className="button-link-style">
-                {initialerStapel.lernrichtung === 'Vorder-Rück' ? 'Vorderseite ➞ Rückseite' : 'Rückseite ➞ Vorderseite'}
-              </button>
-            </div>
-
-            {/* Sprachauswahl */}
-            <div className="setting-item">
-              <LanguageSelector
-                label="Sprache Vorderseite"
-                sprache={initialerStapel.quellSprache}
-                onSprachAenderung={(neueSprache) => handleSprachAenderung('quellSprache', neueSprache)}
-              />
-            </div>
-            <div className="setting-item">
-              <LanguageSelector
-                label="Sprache Rückseite"
-                sprache={initialerStapel.zielSprache}
-                onSprachAenderung={(neueSprache) => handleSprachAenderung('zielSprache', neueSprache)}
-              />
-            </div>
-          </div>
+            {/* Sprachausgabe */}
+            <div className="settings-row">
+              <div className="settings-group full-width">
+                <h3>Sprachen für die Sprachausgabe</h3>
+                <div className="language-selectors">
+                  <div className="language-selector-wrapper">
+                    <label>Vorderseite:</label>
+                    <LanguageSelector
+                      sprache={initialerStapel.quellSprache}
+                      onSprachAenderung={(neueSprache) => handleSprachAenderung('quellSprache', neueSprache)}
+                    />
+                  </div>
+                  <div className="language-selector-wrapper">
+                    <label>Rückseite:</label>
+                    <LanguageSelector
+                      sprache={initialerStapel.zielSprache}
+                      onSprachAenderung={(neueSprache) => handleSprachAenderung('zielSprache', neueSprache)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>      
         </div>
 
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
