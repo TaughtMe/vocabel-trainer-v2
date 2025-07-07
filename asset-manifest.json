@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/vocabel-trainer-v2/static/css/main.9cedc5f2.css",
-    "main.js": "/vocabel-trainer-v2/static/js/main.f104de77.js",
+    "main.js": "/vocabel-trainer-v2/static/js/main.db6137ec.js",
     "static/js/453.e67c6314.chunk.js": "/vocabel-trainer-v2/static/js/453.e67c6314.chunk.js",
     "service-worker.js": "/vocabel-trainer-v2/service-worker.js",
     "index.html": "/vocabel-trainer-v2/index.html",
     "static/media/sun.svg": "/vocabel-trainer-v2/static/media/sun.1abf4395c5ba39c75d87baad5ba0f979.svg",
     "static/media/moon.svg": "/vocabel-trainer-v2/static/media/moon.8de7e74932577110d867cc58628cf47c.svg",
     "main.9cedc5f2.css.map": "/vocabel-trainer-v2/static/css/main.9cedc5f2.css.map",
-    "main.f104de77.js.map": "/vocabel-trainer-v2/static/js/main.f104de77.js.map",
+    "main.db6137ec.js.map": "/vocabel-trainer-v2/static/js/main.db6137ec.js.map",
     "453.e67c6314.chunk.js.map": "/vocabel-trainer-v2/static/js/453.e67c6314.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9cedc5f2.css",
-    "static/js/main.f104de77.js"
+    "static/js/main.db6137ec.js"
   ]
 }
