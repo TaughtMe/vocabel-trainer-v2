@@ -86,6 +86,20 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
         </div>
       </header>
       <main>
+    <div className="App">
+      <header className="App-header">
+        <button onClick={onZurueck} className="button-link-style">← Zurück zur Übersicht</button>
+        <div className="stapel-header-main-row">
+          <h1>{initialerStapel.name}</h1>
+          <button onClick={toggleTheme} className="theme-toggle-button">
+            <img
+              src={theme === 'light' ? moonIcon : sunIcon}
+              alt="Theme umschalten"
+            />
+          </button>
+        </div>
+      </header>
+      <main>
         <div className="card">
           <h2>Einstellungen</h2>
           <div className="einstellungen-layout-container">
@@ -131,6 +145,17 @@ function StapelAnsicht({ initialerStapel, onStapelUpdate, onZurueck, theme, togg
           </div>
         </div>
 
+        <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
+        <hr />
+        <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
+        <hr />
+        <DatenManagement
+          vokabeln={vokabeln}
+          onStapelImport={handleStapelImport}
+          onCsvImport={handleCsvImport}
+        />
+      </main>
+    </div>
         <VokabelEingabe onVokabelHinzufuegen={addVokabel} />
         <hr />
         <VokabelListe vokabeln={vokabeln} onLernenStarten={startQuizForLevel} />
