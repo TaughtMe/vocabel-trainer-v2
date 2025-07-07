@@ -93,17 +93,8 @@ function DatenManagement({ vokabeln, onStapelImport, onCsvImport }) {
           <p> Import Bsp:Haus, house</p>
           <button onClick={handleCsvImportClick} className="button-full-width button-success">CSV Importieren</button>
         </div>
-
-        <div className="stapel-sicherung">
-          <h3>Stapel-Sicherung</h3>
-          <p>Exportiert oder importiert den kompletten Stapel inkl. Lernfortschritt.</p>
-          <div className="button-group">
-            <button onClick={handleExport} className="button-warning">Exportieren</button>
-            <button onClick={handleJsonImportClick} className="button-accent">Importieren</button>
-          </div>
-        </div>
-      </div>
     </div>
+  </div>
   );
 }
 

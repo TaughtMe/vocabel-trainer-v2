@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import moonIcon from './moon.svg';
 import sunIcon from './sun.svg';
 
-// KORREKTUR: onSammlungImportieren wird jetzt als Prop empfangen
 function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, onStapelLöschen, theme, toggleTheme, onGanzesExportieren, onSammlungImportieren }) {
   const [neuerStapelName, setNeuerStapelName] = useState('');
 
@@ -20,7 +19,7 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
         <div className="App">
           <header className="App-header header-overview">
               <div>
-                  <h1>LernBox2.027 beta</h1>
+                  <h1>LernBox2.026 beta</h1>
                   <p className="subtitle">Wähle einen Stapel oder erstelle einen neuen.</p>
               </div>
               <button onClick={toggleTheme} className="theme-toggle-button">
@@ -66,9 +65,15 @@ function StapelAuswahl({ stapelSammlung, onStapelAuswählen, onStapelErstellen, 
               </form>
             </div>
 
-            {/* NEU: Import- und Export-Buttons in einer gemeinsamen Card */}
+            {/* HIER WURDE DER TEXT EINGEFÜGT */}
             <div className="card">
-             <div className="button-container">
+              <div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
+                <h3>Stapel-Sicherung</h3>
+                <p style={{fontSize: '0.9rem', opacity: '0.8'}}>
+                  Exportiert oder importiert die komplette Sammlung aller Stapel.
+                </p>
+              </div>
+              <div className="button-container">
                 <button onClick={onGanzesExportieren} className="button-export">
                   Exportieren
                 </button>
