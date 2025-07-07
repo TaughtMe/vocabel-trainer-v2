@@ -167,6 +167,7 @@ function App() {
         onZurueck={handleZurueckZurUebersicht}
         theme={theme}
         toggleTheme={toggleTheme}
+        ganzeSammlung={stapelSammlung} 
       />
     );
   } else {
