@@ -50,7 +50,7 @@ function DatenManagement({ vokabeln, onCsvImport }) {
       
       <div className="import-export-container">
         <h3>Karten aus CSV hinzufügen</h3>
-        <p>Fügt Vokabeln zum aktuellen Stapel hinzu. Format: `Wort1,Übersetzung1`</p>
+        <p>Vokabel in einer Spalte durch Komma getrennt. Bsp: Hund,dog</p>
         <button onClick={handleCsvImportClick} className="button-full-width button-success">CSV Importieren</button>
       </div>
     </div>
